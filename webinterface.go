@@ -23,6 +23,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	http.Handle("/", http.FileServer(http.Dir("./static")))
+	http.Handle("/", http.FileServer(assetFS()))
+
 	http.ListenAndServe(*listenAddress, nil)
 }

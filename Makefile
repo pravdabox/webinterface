@@ -1,11 +1,12 @@
 all:
 	clear
-	go run webinterface.go
+	go build
+	./webinterface
 
 pack-assets:
-	go-bindata -debug static/...
+	go-bindata-assetfs -debug static/...
 
 pack-assets-production:
-	go-bindata static/...
+	go-bindata-assetfs static/...
 
 .PHONY: all
