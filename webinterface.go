@@ -8,7 +8,7 @@ import (
 )
 
 // VERSION holds the version
-const VERSION = "0.1.0"
+const VERSION = "0.2.0"
 
 var (
 	listenAddress = flag.String("l", "127.0.0.1:8080", "Web interface listen address")
