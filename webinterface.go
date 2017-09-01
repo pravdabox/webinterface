@@ -10,14 +10,15 @@ import (
 )
 
 // VERSION holds the version
-const VERSION = "0.4.3"
+const VERSION = "0.4.4"
 
 // MAXFORKS limits the forks of websockets
 const MAXFORKS = 10
 
 var (
-	listenAddress = flag.String("l", "127.0.0.1:8080", "Web interface listen address")
-	version       = flag.Bool("v", false, "Display version")
+	listenAddress   = flag.String("l", "127.0.0.1:8080", "Web interface listen address")
+	wsListenAddress = flag.String("wsl", "127.0.0.1:8088", "Web sockets listen address")
+	version         = flag.Bool("v", false, "Display version")
 )
 
 func main() {
@@ -64,7 +65,7 @@ func websockets() {
 		handler := http.StripPrefix("/ws-bin", wsd.NewWebsocketdServer(config, logScope, MAXFORKS))
 		handler.ServeHTTP(rw, req)
 	})
-	if err := http.ListenAndServe(fmt.Sprintf(":%d", 8088), nil); err != nil {
+	if err := http.ListenAndServe(*wsListenAddress, nil); err != nil {
 		fmt.Println("could not start server!", err)
 		os.Exit(1)
 	}
