@@ -10,7 +10,7 @@
     maxlen = 10;
     c = 0;
     return ws.onmessage = function(event) {
-      $('.filter-dns .line:last').append('<div class="l l-' + c + '">' + event.data + '</div>');
+      $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo('.filter-dns');
       if ($('.filter-dns .l').length > maxlen) {
         $('.filter-dns .l-' + (c - maxlen)).remove();
       }
