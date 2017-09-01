@@ -1,3 +1,9 @@
+
+/* for the bildaufbau */
+body { visibility: hidden }
+
+/* fix menu position */
 .open > .dropdown-menu {
     top: 40px;
 }
+
