@@ -4,9 +4,19 @@
 
   P = window.P || {};
 
-  P.dns(function() {
-    return true;
-  });
+  P.dns = function() {
+    var c, maxlen, ws;
+    ws = new WebSocket('ws://192.168.42.1:8081/');
+    maxlen = 10;
+    c = 0;
+    return ws.onmessage = function(event) {
+      $('.filter-dns .line:last').append('<div class="l l-' + c + '">' + event.data + '</div>');
+      if ($('.filter-dns .l').length > maxlen) {
+        $('.filter-dns .l-' + (c - maxlen)).remove();
+      }
+      return c++;
+    };
+  };
 
   $(function() {
     return P.dns();
