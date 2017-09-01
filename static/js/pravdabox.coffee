@@ -2,8 +2,8 @@
 P = window.P || {}
 
 P.dns = ->
-    ws = new WebSocket 'ws://192.168.42.1:8081/'
-    #ws = new WebSocket 'ws://localhost:8081/'
+    ws = new WebSocket 'ws://192.168.42.1:8088/ws-bin/dns'
+    #ws = new WebSocket 'ws://localhost:8088/ws-bin/dns'
     maxlen = 10
 
     c = 0
