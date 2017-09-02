@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/fsnotify/fsnotify"
 	wsd "github.com/joewalnes/websocketd/libwebsocketd"
 	"net/http"
 	"os"
@@ -10,7 +11,7 @@ import (
 )
 
 // VERSION holds the version
-const VERSION = "0.5.1"
+const VERSION = "0.6.0"
 
 // MAXFORKS limits the forks of websockets
 const MAXFORKS = 10
@@ -31,10 +32,11 @@ func main() {
 
 	go webinterface()
 	go websockets()
+	go imagesWatcher()
 
 	// wait indefinitely
-	wait := make(chan string)
-	<-wait
+	done := make(chan bool)
+	<-done
 }
 
 func webinterface() {
@@ -69,4 +71,34 @@ func websockets() {
 		fmt.Println("could not start server!", err)
 		os.Exit(1)
 	}
+}
+
+func imagesWatcher() {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer watcher.Close()
+
+	go func() {
+		for {
+			select {
+			case event := <-watcher.Events:
+				fmt.Println("event:", event)
+				if event.Op&fsnotify.Write == fsnotify.Write {
+					fmt.Println("modified file:", event.Name)
+				}
+			case err := <-watcher.Errors:
+				fmt.Println("error:", err)
+			}
+		}
+	}()
+
+	err = watcher.Add("/tmp/driftnet")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	done := make(chan bool)
+	<-done
 }
