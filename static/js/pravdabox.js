@@ -18,8 +18,17 @@
     };
   };
 
+  P.images = function() {
+    var ws;
+    ws = new WebSocket('ws://192.168.42.1:8088/ws-bin/images');
+    return ws.onmessage = function(event) {
+      return $('.filter-images .display').html(event.data);
+    };
+  };
+
   $(function() {
-    return P.dns();
+    P.dns();
+    return P.images();
   });
 
 }).call(this);

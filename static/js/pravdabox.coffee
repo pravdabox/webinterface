@@ -14,6 +14,14 @@ P.dns = ->
             $('.filter-dns .l-' + (c - maxlen)).remove()
         c++
 
+P.images = ->
+    ws = new WebSocket 'ws://192.168.42.1:8088/ws-bin/images'
+    #ws = new WebSocket 'ws://localhost:8088/ws-bin/images'
+
+    ws.onmessage = (event) ->
+        $('.filter-images .display').html event.data
+
 $ ->
     P.dns()
+    P.images()
 
