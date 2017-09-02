@@ -6,7 +6,7 @@
 
   P.dns = function() {
     var c, maxlen, ws;
-    ws = new WebSocket('ws://192.168.42.1:8088/ws-bin/dns');
+    ws = new WebSocket('ws://192.168.42.1/ws-bin/dns');
     maxlen = 10;
     c = 0;
     return ws.onmessage = function(event) {
@@ -20,7 +20,7 @@
 
   P.images = function() {
     var ws;
-    ws = new WebSocket('ws://192.168.42.1:8088/ws-bin/images');
+    ws = new WebSocket('ws://192.168.42.1/ws-bin/images');
     return ws.onmessage = function(event) {
       return $('.filter-images .display').html(event.data);
     };

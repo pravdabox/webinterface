@@ -2,7 +2,7 @@
 P = window.P || {}
 
 P.dns = ->
-    ws = new WebSocket 'ws://192.168.42.1:8088/ws-bin/dns'
+    ws = new WebSocket 'ws://192.168.42.1/ws-bin/dns'
     #ws = new WebSocket 'ws://localhost:8088/ws-bin/dns'
     maxlen = 10
 
@@ -15,7 +15,7 @@ P.dns = ->
         c++
 
 P.images = ->
-    ws = new WebSocket 'ws://192.168.42.1:8088/ws-bin/images'
+    ws = new WebSocket 'ws://192.168.42.1/ws-bin/images'
     #ws = new WebSocket 'ws://localhost:8088/ws-bin/images'
 
     ws.onmessage = (event) ->
