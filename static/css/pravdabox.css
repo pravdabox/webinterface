@@ -11,3 +11,12 @@ body { visibility: hidden }
     white-space: pre-wrap;
     word-break: break-all;
 }
+
+img {
+  -webkit-filter: contrast(100%);
+     -moz-filter: contrast(100%);
+      -ms-filter: contrast(100%);
+       -o-filter: contrast(100%);
+          filter: contrast(100%);
+}
+
