@@ -15,7 +15,7 @@ import (
 var p = fmt.Println
 
 // VERSION holds the version
-const VERSION = "0.8.4"
+const VERSION = "0.8.5"
 
 // MAXFORKS limits the forks of websockets
 const MAXFORKS = 10
@@ -57,7 +57,7 @@ func webserver() {
 		StartupTime:    time.Now(),
 		DevConsole:     false,
 	}
-	http.HandleFunc("/ws-bin", func(rw http.ResponseWriter, req *http.Request) {
+	http.HandleFunc("/ws-bin/", func(rw http.ResponseWriter, req *http.Request) {
 		handler := http.StripPrefix("/ws-bin", wsd.NewWebsocketdServer(config, logScope, MAXFORKS))
 		handler.ServeHTTP(rw, req)
 	})
