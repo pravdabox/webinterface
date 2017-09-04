@@ -3,7 +3,7 @@ P = window.P || {}
 
 P.dns = ->
     ws = new WebSocket 'ws://192.168.42.1/ws-bin/dns'
-    #ws = new WebSocket 'ws://localhost:8088/ws-bin/dns'
+    #ws = new WebSocket 'ws://localhost:8080/ws-bin/dns'
     maxlen = 10
 
     c = 0
@@ -16,10 +16,16 @@ P.dns = ->
 
 P.images = ->
     ws = new WebSocket 'ws://192.168.42.1/ws-bin/images'
-    #ws = new WebSocket 'ws://localhost:8088/ws-bin/images'
+    #ws = new WebSocket 'ws://localhost:8080/ws-bin/images'
+    maxlen = 10
 
+    c = 0
     ws.onmessage = (event) ->
         $('.filter-images .display').html event.data
+        $('<img class="i i-' + c + '" src="/image/' + event.data + '">').appendTo '.filter-images'
+        if $('.filter-images .i').length > maxlen
+            $('.filter-images .i-' + (c - maxlen)).remove()
+        c++
 
 $ ->
     P.dns()

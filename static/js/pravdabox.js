@@ -19,10 +19,17 @@
   };
 
   P.images = function() {
-    var ws;
+    var c, maxlen, ws;
     ws = new WebSocket('ws://192.168.42.1/ws-bin/images');
+    maxlen = 10;
+    c = 0;
     return ws.onmessage = function(event) {
-      return $('.filter-images .display').html(event.data);
+      $('.filter-images .display').html(event.data);
+      $('<img class="i i-' + c + '" src="/image/' + event.data + '">').appendTo('.filter-images');
+      if ($('.filter-images .i').length > maxlen) {
+        $('.filter-images .i-' + (c - maxlen)).remove();
+      }
+      return c++;
     };
   };
 
