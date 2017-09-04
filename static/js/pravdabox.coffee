@@ -21,7 +21,7 @@ P.images = ->
 
     c = 0
     ws.onmessage = (event) ->
-        $('<img class="i i-' + c + '" src="/image/' + event.data + '">').appendTo '.filter-images'
+        $('<a href="/image/' + event.data + '" target="_blank"><img class="i i-' + c + '" src="/image/' + event.data + '"></a>').appendTo '.filter-images'
         if $('.filter-images .i').length > maxlen
             $('.filter-images .i-' + (c - maxlen)).remove()
         c++

@@ -24,7 +24,7 @@
     maxlen = 30;
     c = 0;
     return ws.onmessage = function(event) {
-      $('<img class="i i-' + c + '" src="/image/' + event.data + '">').appendTo('.filter-images');
+      $('<a href="/image/' + event.data + '" target="_blank"><img class="i i-' + c + '" src="/image/' + event.data + '"></a>').appendTo('.filter-images');
       if ($('.filter-images .i').length > maxlen) {
         $('.filter-images .i-' + (c - maxlen)).remove();
       }
