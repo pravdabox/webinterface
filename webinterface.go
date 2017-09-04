@@ -15,7 +15,7 @@ import (
 var p = fmt.Println
 
 // VERSION holds the version
-const VERSION = "0.8.5"
+const VERSION = "0.9.0"
 
 // MAXFORKS limits the forks of websockets
 const MAXFORKS = 10
@@ -63,7 +63,7 @@ func webserver() {
 	})
 
 	// images
-	http.Handle("/image", http.FileServer(http.Dir("/tmp/driftnet")))
+	http.Handle("/image/", http.StripPrefix("/image/", http.FileServer(http.Dir("/tmp/driftnet"))))
 
 	http.ListenAndServe(*listenAddress, nil)
 }
