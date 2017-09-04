@@ -7,11 +7,15 @@ import (
 	wsd "github.com/joewalnes/websocketd/libwebsocketd"
 	"net/http"
 	"os"
+	s "strings"
 	"time"
 )
 
+// make shit shorter
+var p = fmt.Println
+
 // VERSION holds the version
-const VERSION = "0.7.0"
+const VERSION = "0.7.1"
 
 // MAXFORKS limits the forks of websockets
 const MAXFORKS = 10
@@ -25,7 +29,7 @@ func main() {
 	flag.Parse()
 
 	if *version {
-		fmt.Println(VERSION)
+		p(VERSION)
 		os.Exit(0)
 	}
 
@@ -45,7 +49,7 @@ func webserver() {
 	logScope := wsd.RootLogScope(wsd.LogAccess, func(l *wsd.LogScope,
 		level wsd.LogLevel, levelName string,
 		category string, msg string, args ...interface{}) {
-		fmt.Println(args...)
+		p(args...)
 	})
 	config := &wsd.Config{
 		ScriptDir:      "/opt/pravdabox/filters",
@@ -64,27 +68,35 @@ func webserver() {
 func imagesWatcher() {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
-		fmt.Println(err)
+		p(err)
 	}
 	defer watcher.Close()
+
+	outfile, err := os.OpenFile("/tmp/filter-images.out", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
+	if err != nil {
+		p(err)
+	}
+	defer outfile.Close()
 
 	go func() {
 		for {
 			select {
 			case event := <-watcher.Events:
-				fmt.Println("event:", event)
-				if event.Op&fsnotify.Write == fsnotify.Write {
-					fmt.Println("modified file:", event.Name)
+				if event.Op&fsnotify.Create == fsnotify.Create {
+					filename := s.Replace(event.Name, "/tmp/driftnet/", "", 1)
+					if _, err = outfile.WriteString(filename + "\n"); err != nil {
+						p("error:", err)
+					}
 				}
 			case err := <-watcher.Errors:
-				fmt.Println("error:", err)
+				p("error:", err)
 			}
 		}
 	}()
 
 	err = watcher.Add("/tmp/driftnet")
 	if err != nil {
-		fmt.Println(err)
+		p(err)
 	}
 
 	done := make(chan bool)
