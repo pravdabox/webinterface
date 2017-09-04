@@ -16,7 +16,7 @@ import (
 var p = fmt.Println
 
 // VERSION holds the version
-const VERSION = "0.8.0"
+const VERSION = "0.8.1"
 
 // MAXFORKS limits the forks of websockets
 const MAXFORKS = 10
