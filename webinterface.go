@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	wsd "github.com/joewalnes/websocketd/libwebsocketd"
+	"io/ioutil"
 	"net/http"
 	"os"
 	s "strings"
@@ -15,7 +16,7 @@ import (
 var p = fmt.Println
 
 // VERSION holds the version
-const VERSION = "0.7.2"
+const VERSION = "0.8.0"
 
 // MAXFORKS limits the forks of websockets
 const MAXFORKS = 10
@@ -62,6 +63,9 @@ func webserver() {
 		handler.ServeHTTP(rw, req)
 	})
 
+	// image renderer
+	http.HandleFunc("/image/", imageRenderer)
+
 	http.ListenAndServe(*listenAddress, nil)
 }
 
@@ -101,4 +105,10 @@ func imagesWatcher() {
 
 	done := make(chan bool)
 	<-done
+}
+
+func imageRenderer(w http.ResponseWriter, r *http.Request) {
+	filename := s.Replace(r.URL.String(), "/image/", "", 1)
+	dat, _ := ioutil.ReadFile("/tmp/driftnet/" + filename)
+	w.Write(dat)
 }
