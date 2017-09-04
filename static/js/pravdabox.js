@@ -21,7 +21,7 @@
   P.images = function() {
     var c, maxlen, ws;
     ws = new WebSocket('ws://192.168.42.1/ws-bin/images');
-    maxlen = 10;
+    maxlen = 30;
     c = 0;
     return ws.onmessage = function(event) {
       $('<img class="i i-' + c + '" src="/image/' + event.data + '">').appendTo('.filter-images');

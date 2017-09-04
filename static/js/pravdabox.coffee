@@ -17,7 +17,7 @@ P.dns = ->
 P.images = ->
     ws = new WebSocket 'ws://192.168.42.1/ws-bin/images'
     #ws = new WebSocket 'ws://localhost:8080/ws-bin/images'
-    maxlen = 10
+    maxlen = 30
 
     c = 0
     ws.onmessage = (event) ->
