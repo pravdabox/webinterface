@@ -12,6 +12,7 @@ body { visibility: hidden }
     word-break: break-all;
 }
 
+/* reset i386 contrast */
 img {
   -webkit-filter: contrast(100%);
      -moz-filter: contrast(100%);
@@ -20,3 +21,8 @@ img {
           filter: contrast(100%);
 }
 
+.filter-images img {
+    max-width: 200px;
+    max-height: 200px;
+    margin: 10px;
+}
