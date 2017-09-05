@@ -14,6 +14,19 @@ P.dns = ->
             $('.filter-dns .l-' + (c - maxlen)).remove()
         c++
 
+P.connections = ->
+    ws = new WebSocket 'ws://192.168.42.1/ws-bin/connections'
+    #ws = new WebSocket 'ws://localhost:8080/ws-bin/connections'
+    maxlen = 10
+
+    c = 0
+    ws.onmessage = (event) ->
+        #$('.filter-connections .l:last').append '<div class="l l-' + c + '">' + event.data + '</div>'
+        $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-connections'
+        if $('.filter-connections .l').length > maxlen
+            $('.filter-connections .l-' + (c - maxlen)).remove()
+        c++
+
 P.http = ->
     ws = new WebSocket 'ws://192.168.42.1/ws-bin/http'
     #ws = new WebSocket 'ws://localhost:8080/ws-bin/http'
@@ -25,6 +38,19 @@ P.http = ->
         $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-http'
         if $('.filter-http .l').length > maxlen
             $('.filter-http .l-' + (c - maxlen)).remove()
+        c++
+
+P.cookies = ->
+    ws = new WebSocket 'ws://192.168.42.1/ws-bin/cookies'
+    #ws = new WebSocket 'ws://localhost:8080/ws-bin/cookies'
+    maxlen = 10
+
+    c = 0
+    ws.onmessage = (event) ->
+        #$('.filter-cookies .l:last').append '<div class="l l-' + c + '">' + event.data + '</div>'
+        $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-cookies'
+        if $('.filter-cookies .l').length > maxlen
+            $('.filter-cookies .l-' + (c - maxlen)).remove()
         c++
 
 P.images = ->
@@ -41,6 +67,8 @@ P.images = ->
 
 $ ->
     P.dns()
+    P.connections()
     P.http()
+    P.cookies()
     P.images()
 
