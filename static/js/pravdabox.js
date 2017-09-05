@@ -18,6 +18,20 @@
     };
   };
 
+  P.http = function() {
+    var c, maxlen, ws;
+    ws = new WebSocket('ws://192.168.42.1/ws-bin/http');
+    maxlen = 10;
+    c = 0;
+    return ws.onmessage = function(event) {
+      $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo('.filter-http');
+      if ($('.filter-http .l').length > maxlen) {
+        $('.filter-http .l-' + (c - maxlen)).remove();
+      }
+      return c++;
+    };
+  };
+
   P.images = function() {
     var c, maxlen, ws;
     ws = new WebSocket('ws://192.168.42.1/ws-bin/images');

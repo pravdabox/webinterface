@@ -14,6 +14,19 @@ P.dns = ->
             $('.filter-dns .l-' + (c - maxlen)).remove()
         c++
 
+P.http = ->
+    ws = new WebSocket 'ws://192.168.42.1/ws-bin/http'
+    #ws = new WebSocket 'ws://localhost:8080/ws-bin/http'
+    maxlen = 10
+
+    c = 0
+    ws.onmessage = (event) ->
+        #$('.filter-http .l:last').append '<div class="l l-' + c + '">' + event.data + '</div>'
+        $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-http'
+        if $('.filter-http .l').length > maxlen
+            $('.filter-http .l-' + (c - maxlen)).remove()
+        c++
+
 P.images = ->
     ws = new WebSocket 'ws://192.168.42.1/ws-bin/images'
     #ws = new WebSocket 'ws://localhost:8080/ws-bin/images'
