@@ -48,6 +48,7 @@
 
   $(function() {
     P.dns();
+    P.http();
     return P.images();
   });
 

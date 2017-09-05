@@ -41,5 +41,6 @@ P.images = ->
 
 $ ->
     P.dns()
+    P.http()
     P.images()
 
