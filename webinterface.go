@@ -40,7 +40,6 @@ var (
 // Model of stuff to render a page
 type Model struct {
 	Title string
-	Name  string
 }
 
 // Parse all of the bindata templates
@@ -97,7 +96,7 @@ func webserver() {
 	// index
 	http.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
 		model := Model{
-			Title: "bla",
+			Title: "Pravdabox",
 		}
 		renderTemplate(rw, "templates/index.html", &model)
 	})
@@ -105,7 +104,7 @@ func webserver() {
 	// about
 	http.HandleFunc("/about", func(rw http.ResponseWriter, req *http.Request) {
 		model := Model{
-			Title: "About",
+			Title: "Pravdabox - About",
 		}
 		renderTemplate(rw, "templates/about.html", &model)
 	})
