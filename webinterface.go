@@ -5,25 +5,54 @@ import (
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	wsd "github.com/joewalnes/websocketd/libwebsocketd"
+	"html/template"
 	"net/http"
 	"os"
 	s "strings"
 	"time"
 )
 
-// make shit shorter
-var p = fmt.Println
+const (
+	// VERSION holds the version
+	VERSION = "0.11.0"
 
-// VERSION holds the version
-const VERSION = "0.11.0"
-
-// MAXFORKS limits the forks of websockets
-const MAXFORKS = 10
+	// MAXFORKS limits the forks of websockets
+	MAXFORKS = 10
+)
 
 var (
+	// flags
 	listenAddress = flag.String("l", "127.0.0.1:8080", "Web interface listen address")
 	version       = flag.Bool("v", false, "Display version")
+
+	// templates
+	templateMap = template.FuncMap{
+		"Upper": func(str string) string {
+			return s.ToUpper(str)
+		},
+	}
+	templates = template.New("").Funcs(templateMap)
+
+	// make shit shorter
+	p = fmt.Println
 )
+
+// Model of stuff to render a page
+type Model struct {
+	Title string
+	Name  string
+}
+
+// Parse all of the bindata templates
+func init() {
+	for _, path := range AssetNames() {
+		bytes, err := Asset(path)
+		if err != nil {
+			p("Unable to parse: path=%s, err=%s", path, err)
+		}
+		templates.New(path).Parse(string(bytes))
+	}
+}
 
 func main() {
 	flag.Parse()
@@ -43,7 +72,7 @@ func main() {
 
 func webserver() {
 	// staticfiles
-	http.Handle("/", http.FileServer(assetFS()))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(assetFS())))
 
 	// websocket
 	logScope := wsd.RootLogScope(wsd.LogAccess, func(l *wsd.LogScope,
@@ -64,6 +93,14 @@ func webserver() {
 
 	// images
 	http.Handle("/image/", http.StripPrefix("/image/", http.FileServer(http.Dir("/tmp/driftnet"))))
+
+	// index
+	http.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
+		model := Model{
+			Title: "bla",
+		}
+		renderTemplate(rw, "templates/index.html", &model)
+	})
 
 	http.ListenAndServe(*listenAddress, nil)
 }
@@ -104,4 +141,12 @@ func imagesWatcher() {
 
 	done := make(chan bool)
 	<-done
+}
+
+// Render a template given a model
+func renderTemplate(w http.ResponseWriter, tmpl string, p interface{}) {
+	err := templates.ExecuteTemplate(w, tmpl, p)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
