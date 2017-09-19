@@ -4,9 +4,11 @@
 
   P = window.P || {};
 
+  P.ws_endpoint = 'ws://192.168.42.1/ws-bin';
+
   P.dns = function() {
     var c, maxlen, ws;
-    ws = new WebSocket('ws://192.168.42.1/ws-bin/dns');
+    ws = new WebSocket(P.ws_endpoint + '/dns');
     maxlen = 10;
     c = 0;
     return ws.onmessage = function(event) {
@@ -20,7 +22,7 @@
 
   P.connections = function() {
     var c, maxlen, ws;
-    ws = new WebSocket('ws://192.168.42.1/ws-bin/connections');
+    ws = new WebSocket(P.ws_endpoint + '/connections');
     maxlen = 10;
     c = 0;
     return ws.onmessage = function(event) {
@@ -34,7 +36,7 @@
 
   P.http = function() {
     var c, maxlen, ws;
-    ws = new WebSocket('ws://192.168.42.1/ws-bin/http');
+    ws = new WebSocket(P.ws_endpoint + '/http');
     maxlen = 10;
     c = 0;
     return ws.onmessage = function(event) {
@@ -48,7 +50,7 @@
 
   P.cookies = function() {
     var c, maxlen, ws;
-    ws = new WebSocket('ws://192.168.42.1/ws-bin/cookies');
+    ws = new WebSocket(P.ws_endpoint + '/cookies');
     maxlen = 10;
     c = 0;
     return ws.onmessage = function(event) {
@@ -62,7 +64,7 @@
 
   P.images = function() {
     var c, maxlen, ws;
-    ws = new WebSocket('ws://192.168.42.1/ws-bin/images');
+    ws = new WebSocket(P.ws_endpoint + '/images');
     maxlen = 30;
     c = 0;
     return ws.onmessage = function(event) {

@@ -26,3 +26,8 @@ img {
     max-height: 200px;
     margin: 10px;
 }
+
+.hero-unit {
+    max-height: 7em;
+    overflow: auto;
+}
