@@ -109,6 +109,22 @@ func webserver() {
 		renderTemplate(rw, "templates/about.html", &model)
 	})
 
+	// firmwareupdate
+	http.HandleFunc("/firmwareupdate", func(rw http.ResponseWriter, req *http.Request) {
+		model := Model{
+			Title: "Pravdabox - Firmwareupdate",
+		}
+		renderTemplate(rw, "templates/firmwareupdate.html", &model)
+	})
+
+	// upgrade
+	http.HandleFunc("/upgrade", func(rw http.ResponseWriter, req *http.Request) {
+		model := Model{
+			Title: "Pravdabox - Upgrade your privacy",
+		}
+		renderTemplate(rw, "templates/upgrade.html", &model)
+	})
+
 	http.ListenAndServe(*listenAddress, nil)
 }
 
