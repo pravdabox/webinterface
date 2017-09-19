@@ -102,6 +102,14 @@ func webserver() {
 		renderTemplate(rw, "templates/index.html", &model)
 	})
 
+	// about
+	http.HandleFunc("/about", func(rw http.ResponseWriter, req *http.Request) {
+		model := Model{
+			Title: "About",
+		}
+		renderTemplate(rw, "templates/about.html", &model)
+	})
+
 	http.ListenAndServe(*listenAddress, nil)
 }
 
