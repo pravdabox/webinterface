@@ -11,7 +11,7 @@ P.dns = ->
     c = 0
     ws.onmessage = (event) ->
         #$('.filter-dns .l:last').append '<div class="l l-' + c + '">' + event.data + '</div>'
-        $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-dns'
+        $('<div class="l l-' + c + '">' + event.data + '</div>').prependTo '.filter-dns'
         if $('.filter-dns .l').length > maxlen
             $('.filter-dns .l-' + (c - maxlen)).remove()
         c++
@@ -23,7 +23,7 @@ P.connections = ->
     c = 0
     ws.onmessage = (event) ->
         #$('.filter-connections .l:last').append '<div class="l l-' + c + '">' + event.data + '</div>'
-        $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-connections'
+        $('<div class="l l-' + c + '">' + event.data + '</div>').prependTo '.filter-connections'
         if $('.filter-connections .l').length > maxlen
             $('.filter-connections .l-' + (c - maxlen)).remove()
         c++
@@ -35,7 +35,7 @@ P.http = ->
     c = 0
     ws.onmessage = (event) ->
         #$('.filter-http .l:last').append '<div class="l l-' + c + '">' + event.data + '</div>'
-        $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-http'
+        $('<div class="l l-' + c + '">' + event.data + '</div>').prependTo '.filter-http'
         if $('.filter-http .l').length > maxlen
             $('.filter-http .l-' + (c - maxlen)).remove()
         c++
@@ -47,7 +47,7 @@ P.cookies = ->
     c = 0
     ws.onmessage = (event) ->
         #$('.filter-cookies .l:last').append '<div class="l l-' + c + '">' + event.data + '</div>'
-        $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-cookies'
+        $('<div class="l l-' + c + '">' + event.data + '</div>').prependTo '.filter-cookies'
         if $('.filter-cookies .l').length > maxlen
             $('.filter-cookies .l-' + (c - maxlen)).remove()
         c++

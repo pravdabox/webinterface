@@ -12,7 +12,7 @@
     maxlen = 10;
     c = 0;
     return ws.onmessage = function(event) {
-      $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo('.filter-dns');
+      $('<div class="l l-' + c + '">' + event.data + '</div>').prependTo('.filter-dns');
       if ($('.filter-dns .l').length > maxlen) {
         $('.filter-dns .l-' + (c - maxlen)).remove();
       }
@@ -26,7 +26,7 @@
     maxlen = 10;
     c = 0;
     return ws.onmessage = function(event) {
-      $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo('.filter-connections');
+      $('<div class="l l-' + c + '">' + event.data + '</div>').prependTo('.filter-connections');
       if ($('.filter-connections .l').length > maxlen) {
         $('.filter-connections .l-' + (c - maxlen)).remove();
       }
@@ -40,7 +40,7 @@
     maxlen = 10;
     c = 0;
     return ws.onmessage = function(event) {
-      $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo('.filter-http');
+      $('<div class="l l-' + c + '">' + event.data + '</div>').prependTo('.filter-http');
       if ($('.filter-http .l').length > maxlen) {
         $('.filter-http .l-' + (c - maxlen)).remove();
       }
@@ -54,7 +54,7 @@
     maxlen = 10;
     c = 0;
     return ws.onmessage = function(event) {
-      $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo('.filter-cookies');
+      $('<div class="l l-' + c + '">' + event.data + '</div>').prependTo('.filter-cookies');
       if ($('.filter-cookies .l').length > maxlen) {
         $('.filter-cookies .l-' + (c - maxlen)).remove();
       }
