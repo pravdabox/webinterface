@@ -4,14 +4,15 @@ P = window.P || {}
 P.ws_endpoint = 'ws://192.168.42.1/ws-bin'
 #P.ws_endpoint = 'ws://localhost:8080/ws-bin'
 
+P.connections_bin = []
+
 P.dns = ->
     ws = new WebSocket P.ws_endpoint + '/dns'
     maxlen = 10
 
     c = 0
     ws.onmessage = (event) ->
-        #$('.filter-dns .l:last').append '<div class="l l-' + c + '">' + event.data + '</div>'
-        $('<div class="l l-' + c + '">' + event.data + '</div>').prependTo '.filter-dns'
+        $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-dns'
         if $('.filter-dns .l').length > maxlen
             $('.filter-dns .l-' + (c - maxlen)).remove()
         c++
@@ -22,11 +23,13 @@ P.connections = ->
 
     c = 0
     ws.onmessage = (event) ->
-        #$('.filter-connections .l:last').append '<div class="l l-' + c + '">' + event.data + '</div>'
-        $('<div class="l l-' + c + '">' + event.data + '</div>').prependTo '.filter-connections'
+        $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-connections'
         if $('.filter-connections .l').length > maxlen
             $('.filter-connections .l-' + (c - maxlen)).remove()
         c++
+
+P.connections_add = (connection) ->
+    #
 
 P.http = ->
     ws = new WebSocket P.ws_endpoint + '/http'
@@ -34,8 +37,7 @@ P.http = ->
 
     c = 0
     ws.onmessage = (event) ->
-        #$('.filter-http .l:last').append '<div class="l l-' + c + '">' + event.data + '</div>'
-        $('<div class="l l-' + c + '">' + event.data + '</div>').prependTo '.filter-http'
+        $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-http'
         if $('.filter-http .l').length > maxlen
             $('.filter-http .l-' + (c - maxlen)).remove()
         c++
@@ -46,8 +48,7 @@ P.cookies = ->
 
     c = 0
     ws.onmessage = (event) ->
-        #$('.filter-cookies .l:last').append '<div class="l l-' + c + '">' + event.data + '</div>'
-        $('<div class="l l-' + c + '">' + event.data + '</div>').prependTo '.filter-cookies'
+        $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-cookies'
         if $('.filter-cookies .l').length > maxlen
             $('.filter-cookies .l-' + (c - maxlen)).remove()
         c++
