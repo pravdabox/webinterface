@@ -4,8 +4,6 @@ P = window.P || {}
 P.ws_endpoint = 'ws://192.168.42.1/ws-bin'
 #P.ws_endpoint = 'ws://localhost:8080/ws-bin'
 
-P.connections_bin = []
-
 P.dns = ->
     ws = new WebSocket P.ws_endpoint + '/dns'
     maxlen = 10
@@ -19,17 +17,23 @@ P.dns = ->
 
 P.connections = ->
     ws = new WebSocket P.ws_endpoint + '/connections'
-    maxlen = 10
 
-    c = 0
     ws.onmessage = (event) ->
-        $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-connections'
-        if $('.filter-connections .l').length > maxlen
-            $('.filter-connections .l-' + (c - maxlen)).remove()
-        c++
+        P.connections_add event.data
 
+        $('.filter-connections').html ''
+
+        c = 0
+        for connection in P.connections_bin
+            $('<div class="l l-' + c + '">' + connection + '</div>').appendTo '.filter-connections'
+            c++
+
+P.connections_bin = []
 P.connections_add = (connection) ->
-    #
+    if connection not in P.connections_bin
+        P.connections_bin.push connection
+    if P.connections_bin.length > 10
+        P.connections_bin.shift()
 
 P.http = ->
     ws = new WebSocket P.ws_endpoint + '/http'
