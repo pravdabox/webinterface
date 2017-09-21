@@ -16,15 +16,30 @@
     ws = new WebSocket(P.ws_endpoint + '/dns');
     c = 0;
     return ws.onmessage = function(event) {
-      var line;
+      var address, i, len, line, ref;
       line = P.colorize(event.data);
-      $('<div class="l l-' + c + '">' + line + '</div>').appendTo('.filter-dns .filterwindow');
-      if ($('.filter-dns .l').length > P.max_lines) {
-        $('.filter-dns .l-' + (c - P.max_lines)).remove();
+      P.dns_add(line);
+      $('.filter-dns .filterwindow').html('');
+      c = 0;
+      ref = P.dns_bin;
+      for (i = 0, len = ref.length; i < len; i++) {
+        address = ref[i];
+        $('<div class="l l-' + c + '">' + address + '</div>').appendTo('.filter-dns .filterwindow');
+        c++;
       }
-      P.scroller('dns');
-      return c++;
+      return P.scroller('dns');
     };
+  };
+
+  P.dns_bin = [];
+
+  P.dns_add = function(address) {
+    if (indexOf.call(P.dns_bin, address) < 0) {
+      P.dns_bin.push(connection);
+    }
+    if (P.dns_bin.length > 10) {
+      return P.dns_bin.shift();
+    }
   };
 
   P.connections = function() {

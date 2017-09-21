@@ -13,11 +13,22 @@ P.dns = ->
     c = 0
     ws.onmessage = (event) ->
         line = P.colorize event.data
-        $('<div class="l l-' + c + '">' + line + '</div>').appendTo '.filter-dns .filterwindow'
-        if $('.filter-dns .l').length > P.max_lines
-            $('.filter-dns .l-' + (c - P.max_lines)).remove()
+        P.dns_add line
+
+        $('.filter-dns .filterwindow').html ''
+
+        c = 0
+        for address in P.dns_bin
+            $('<div class="l l-' + c + '">' + address + '</div>').appendTo '.filter-dns .filterwindow'
+            c++
         P.scroller 'dns'
-        c++
+
+P.dns_bin = []
+P.dns_add = (address) ->
+    if address not in P.dns_bin
+        P.dns_bin.push connection
+    if P.dns_bin.length > 10
+        P.dns_bin.shift()
 
 P.connections = ->
     ws = new WebSocket P.ws_endpoint + '/connections'
