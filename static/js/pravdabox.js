@@ -117,7 +117,6 @@
     } catch (error) {
       ip = 0;
     }
-    ip = ip + 2;
     ip = ip % P.howmanycolors;
     hueval = Math.round(ip / P.howmanycolors * 360);
     block_with_ip = '<span style="color: hsl(' + hueval + ', 100%, 50%);">' + block_with_ip + '</span>';

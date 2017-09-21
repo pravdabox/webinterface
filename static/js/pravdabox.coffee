@@ -90,7 +90,7 @@ P.colorize = (block_with_ip) ->
         ip = 0
 
     # set colorstart to green, red is too agressive as default
-    ip = ip + 2
+    #ip = ip + 2
 
     # position ip on the color wheel
     ip = ip % P.howmanycolors
