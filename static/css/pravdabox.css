@@ -10,7 +10,7 @@ body { visibility: hidden }
 .filterwindow {
     white-space: pre-wrap;
     word-break: break-all;
-    max-height: 7em;
+    max-height: 120px;
     overflow: auto;
 }
 
@@ -29,5 +29,3 @@ img {
     margin: 10px;
 }
 
-.hero-unit {
-}
