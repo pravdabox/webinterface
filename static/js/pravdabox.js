@@ -14,7 +14,9 @@
     ws = new WebSocket(P.ws_endpoint + '/dns');
     c = 0;
     return ws.onmessage = function(event) {
-      $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo('.filter-dns .filterwindow');
+      var line;
+      line = P.colorize(event.data);
+      $('<div class="l l-' + c + '">' + line + '</div>').appendTo('.filter-dns .filterwindow');
       if ($('.filter-dns .l').length > P.max_lines) {
         $('.filter-dns .l-' + (c - P.max_lines)).remove();
       }
@@ -27,8 +29,9 @@
     var ws;
     ws = new WebSocket(P.ws_endpoint + '/connections');
     return ws.onmessage = function(event) {
-      var c, connection, i, len, ref;
-      P.connections_add(event.data);
+      var c, connection, i, len, line, ref;
+      line = P.colorize(event.data);
+      P.connections_add(line);
       $('.filter-connections .filterwindow').html('');
       c = 0;
       ref = P.connections_bin;
@@ -57,7 +60,9 @@
     ws = new WebSocket(P.ws_endpoint + '/http');
     c = 0;
     return ws.onmessage = function(event) {
-      $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo('.filter-http .filterwindow');
+      var line;
+      line = P.colorize(event.data);
+      $('<div class="l l-' + c + '">' + line + '</div>').appendTo('.filter-http .filterwindow');
       if ($('.filter-http .l').length > P.max_lines) {
         $('.filter-http .l-' + (c - P.max_lines)).remove();
       }
@@ -71,7 +76,9 @@
     ws = new WebSocket(P.ws_endpoint + '/cookies');
     c = 0;
     return ws.onmessage = function(event) {
-      $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo('.filter-cookies .filterwindow');
+      var line;
+      line = P.colorize(event.data);
+      $('<div class="l l-' + c + '">' + line + '</div>').appendTo('.filter-cookies .filterwindow');
       if ($('.filter-cookies .l').length > P.max_lines) {
         $('.filter-cookies .l-' + (c - P.max_lines)).remove();
       }
@@ -98,6 +105,22 @@
     return $('.filter-' + filter + ' .filterwindow').animate({
       scrollTop: 10000
     }, 1);
+  };
+
+  P.colorize = function(block_with_ip) {
+    var howmanycolors, hueval, ip;
+    block_with_ip = block_with_ip.replace('192.168.23.', '');
+    howmanycolors = 10;
+    try {
+      ip = parseInt(block_with_ip.split('\t')[0], 10);
+    } catch (error) {
+      ip = 0;
+    }
+    ip = ip + 2;
+    ip = ip % howmanycolors;
+    hueval = Math.round(ip / howmanycolors * 360);
+    block_with_ip = '<span style="color: hsl(' + hueval + ', 100%, 50%);">' + block_with_ip + '</span>';
+    return block_with_ip;
   };
 
   $(function() {

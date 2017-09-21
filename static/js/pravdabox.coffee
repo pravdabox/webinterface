@@ -11,7 +11,8 @@ P.dns = ->
 
     c = 0
     ws.onmessage = (event) ->
-        $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-dns .filterwindow'
+        line = P.colorize event.data
+        $('<div class="l l-' + c + '">' + line + '</div>').appendTo '.filter-dns .filterwindow'
         if $('.filter-dns .l').length > P.max_lines
             $('.filter-dns .l-' + (c - P.max_lines)).remove()
         P.scroller 'dns'
@@ -21,7 +22,8 @@ P.connections = ->
     ws = new WebSocket P.ws_endpoint + '/connections'
 
     ws.onmessage = (event) ->
-        P.connections_add event.data
+        line = P.colorize event.data
+        P.connections_add line
 
         $('.filter-connections .filterwindow').html ''
 
@@ -43,7 +45,8 @@ P.http = ->
 
     c = 0
     ws.onmessage = (event) ->
-        $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-http .filterwindow'
+        line = P.colorize event.data
+        $('<div class="l l-' + c + '">' + line + '</div>').appendTo '.filter-http .filterwindow'
         if $('.filter-http .l').length > P.max_lines
             $('.filter-http .l-' + (c - P.max_lines)).remove()
         P.scroller 'http'
@@ -54,7 +57,8 @@ P.cookies = ->
 
     c = 0
     ws.onmessage = (event) ->
-        $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-cookies .filterwindow'
+        line = P.colorize event.data
+        $('<div class="l l-' + c + '">' + line + '</div>').appendTo '.filter-cookies .filterwindow'
         if $('.filter-cookies .l').length > P.max_lines
             $('.filter-cookies .l-' + (c - P.max_lines)).remove()
         P.scroller 'cookies'
@@ -75,6 +79,28 @@ P.scroller = (filter) ->
     $('.filter-' + filter + ' .filterwindow').animate
         scrollTop: 10000
     , 1
+
+P.colorize = (block_with_ip) ->
+    # strip ip
+    block_with_ip = block_with_ip.replace '192.168.23.', ''
+
+    # determine color
+    howmanycolors = 10
+    try
+        ip = parseInt block_with_ip.split('\t')[0], 10
+    catch
+        ip = 0
+    # set colorstart to green, red is too agressive as default
+    ip = ip + 2
+
+    # position ip on the color wheel
+    ip = ip % howmanycolors
+    hueval = Math.round(ip / howmanycolors * 360)
+
+    # append style
+    block_with_ip = '<span style="color: hsl(' + hueval + ', 100%, 50%);">' + block_with_ip + '</span>'
+
+    return block_with_ip
 
 $ ->
     P.dns()
