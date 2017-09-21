@@ -26,7 +26,7 @@ P.dns = ->
 P.dns_bin = []
 P.dns_add = (address) ->
     if address not in P.dns_bin
-        P.dns_bin.push connection
+        P.dns_bin.push address
     if P.dns_bin.length > 10
         P.dns_bin.shift()
 

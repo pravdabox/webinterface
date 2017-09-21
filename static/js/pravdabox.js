@@ -35,7 +35,7 @@
 
   P.dns_add = function(address) {
     if (indexOf.call(P.dns_bin, address) < 0) {
-      P.dns_bin.push(connection);
+      P.dns_bin.push(address);
     }
     if (P.dns_bin.length > 10) {
       return P.dns_bin.shift();
