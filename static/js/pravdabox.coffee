@@ -89,15 +89,15 @@ P.colorize = (block_with_ip) ->
     catch
         ip = 0
 
-    # set colorstart to green, red is too agressive as default
-    #ip = ip + 2
+    # set colorstart
+    ip = ip - 2
 
     # position ip on the color wheel
     ip = ip % P.howmanycolors
     hueval = Math.round(ip / P.howmanycolors * 360)
 
     # append style
-    block_with_ip = '<span style="color: hsl(' + hueval + ', 100%, 50%);">' + block_with_ip + '</span>'
+    block_with_ip = '<span style="color: hsl(' + hueval + ', 100%, 80%);">' + block_with_ip + '</span>'
 
     return block_with_ip
 
