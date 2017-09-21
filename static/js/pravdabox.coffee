@@ -14,7 +14,7 @@ P.dns = ->
         $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-dns .filterwindow'
         if $('.filter-dns .l').length > P.max_lines
             $('.filter-dns .l-' + (c - P.max_lines)).remove()
-        P.scroller()
+        P.scroller 'dns'
         c++
 
 P.connections = ->
@@ -29,7 +29,7 @@ P.connections = ->
         for connection in P.connections_bin
             $('<div class="l l-' + c + '">' + connection + '</div>').appendTo '.filter-connections .filterwindow'
             c++
-        P.scroller()
+        P.scroller 'connections'
 
 P.connections_bin = []
 P.connections_add = (connection) ->
@@ -46,7 +46,7 @@ P.http = ->
         $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-http .filterwindow'
         if $('.filter-http .l').length > P.max_lines
             $('.filter-http .l-' + (c - P.max_lines)).remove()
-        P.scroller()
+        P.scroller 'http'
         c++
 
 P.cookies = ->
@@ -57,7 +57,7 @@ P.cookies = ->
         $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo '.filter-cookies .filterwindow'
         if $('.filter-cookies .l').length > P.max_lines
             $('.filter-cookies .l-' + (c - P.max_lines)).remove()
-        P.scroller()
+        P.scroller 'cookies'
         c++
 
 P.images = ->
@@ -68,11 +68,11 @@ P.images = ->
         $('<a href="/image/' + event.data + '" target="_blank"><img class="i i-' + c + '" src="/image/' + event.data + '"></a>').prependTo '.filter-images .filterwindow'
         if $('.filter-images .i').length > P.max_lines
             $('.filter-images .i-' + (c - P.max_lines)).remove()
-        P.scroller()
+        P.scroller 'images'
         c++
 
-P.scroller = ->
-    $('.filterwindow').animate
+P.scroller = (filter) ->
+    $('.filter-' + filter + ' .filterwindow').animate
         scrollTop: 10000
     , 1
 

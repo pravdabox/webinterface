@@ -18,7 +18,7 @@
       if ($('.filter-dns .l').length > P.max_lines) {
         $('.filter-dns .l-' + (c - P.max_lines)).remove();
       }
-      P.scroller();
+      P.scroller('dns');
       return c++;
     };
   };
@@ -37,7 +37,7 @@
         $('<div class="l l-' + c + '">' + connection + '</div>').appendTo('.filter-connections .filterwindow');
         c++;
       }
-      return P.scroller();
+      return P.scroller('connections');
     };
   };
 
@@ -61,7 +61,7 @@
       if ($('.filter-http .l').length > P.max_lines) {
         $('.filter-http .l-' + (c - P.max_lines)).remove();
       }
-      P.scroller();
+      P.scroller('http');
       return c++;
     };
   };
@@ -75,7 +75,7 @@
       if ($('.filter-cookies .l').length > P.max_lines) {
         $('.filter-cookies .l-' + (c - P.max_lines)).remove();
       }
-      P.scroller();
+      P.scroller('cookies');
       return c++;
     };
   };
@@ -89,13 +89,13 @@
       if ($('.filter-images .i').length > P.max_lines) {
         $('.filter-images .i-' + (c - P.max_lines)).remove();
       }
-      P.scroller();
+      P.scroller('images');
       return c++;
     };
   };
 
-  P.scroller = function() {
-    return $('.filterwindow').animate({
+  P.scroller = function(filter) {
+    return $('.filter-' + filter + ' .filterwindow').animate({
       scrollTop: 10000
     }, 1);
   };
