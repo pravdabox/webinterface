@@ -1,8 +1,8 @@
 # Pravdabox namespace
 P = window.P || {}
 
-#P.ws_endpoint = 'ws://192.168.42.1/ws-bin'
-P.ws_endpoint = 'ws://localhost:8080/ws-bin'
+P.ws_endpoint = 'ws://192.168.42.1/ws-bin'
+#P.ws_endpoint = 'ws://localhost:8080/ws-bin'
 
 P.max_lines = 10
 
