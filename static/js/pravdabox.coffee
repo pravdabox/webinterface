@@ -5,6 +5,7 @@ P.ws_endpoint = 'ws://192.168.42.1/ws-bin'
 #P.ws_endpoint = 'ws://localhost:8080/ws-bin'
 
 P.max_lines = 10
+P.howmanycolors = 7
 
 P.dns = ->
     ws = new WebSocket P.ws_endpoint + '/dns'
@@ -83,19 +84,17 @@ P.scroller = (filter) ->
 P.colorize = (block_with_ip) ->
     # strip ip
     block_with_ip = block_with_ip.replace '192.168.23.', ''
-
-    # determine color
-    howmanycolors = 10
     try
         ip = parseInt block_with_ip.split('\t')[0], 10
     catch
         ip = 0
+
     # set colorstart to green, red is too agressive as default
     ip = ip + 2
 
     # position ip on the color wheel
-    ip = ip % howmanycolors
-    hueval = Math.round(ip / howmanycolors * 360)
+    ip = ip % P.howmanycolors
+    hueval = Math.round(ip / P.howmanycolors * 360)
 
     # append style
     block_with_ip = '<span style="color: hsl(' + hueval + ', 100%, 50%);">' + block_with_ip + '</span>'

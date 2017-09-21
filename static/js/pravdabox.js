@@ -9,6 +9,8 @@
 
   P.max_lines = 10;
 
+  P.howmanycolors = 7;
+
   P.dns = function() {
     var c, ws;
     ws = new WebSocket(P.ws_endpoint + '/dns');
@@ -108,17 +110,16 @@
   };
 
   P.colorize = function(block_with_ip) {
-    var howmanycolors, hueval, ip;
+    var hueval, ip;
     block_with_ip = block_with_ip.replace('192.168.23.', '');
-    howmanycolors = 10;
     try {
       ip = parseInt(block_with_ip.split('\t')[0], 10);
     } catch (error) {
       ip = 0;
     }
     ip = ip + 2;
-    ip = ip % howmanycolors;
-    hueval = Math.round(ip / howmanycolors * 360);
+    ip = ip % P.howmanycolors;
+    hueval = Math.round(ip / P.howmanycolors * 360);
     block_with_ip = '<span style="color: hsl(' + hueval + ', 100%, 50%);">' + block_with_ip + '</span>';
     return block_with_ip;
   };
