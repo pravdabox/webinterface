@@ -23,8 +23,7 @@ img {
 }
 
 .filterwindow {
-    white-space: pre-wrap;
-    word-break: break-all;
+    white-space: nowrap;
     max-height: 120px;
     overflow: auto;
 }
