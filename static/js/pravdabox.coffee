@@ -23,13 +23,13 @@ P.connections = ->
     ws.onmessage = (event) ->
         P.connections_add event.data
 
-        $('.filter-connections').html ''
+        $('.filter-connections .filterwindow').html ''
 
         c = 0
         for connection in P.connections_bin
             $('<div class="l l-' + c + '">' + connection + '</div>').appendTo '.filter-connections .filterwindow'
-            P.scroller()
             c++
+        P.scroller()
 
 P.connections_bin = []
 P.connections_add = (connection) ->

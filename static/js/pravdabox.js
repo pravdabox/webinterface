@@ -27,19 +27,17 @@
     var ws;
     ws = new WebSocket(P.ws_endpoint + '/connections');
     return ws.onmessage = function(event) {
-      var c, connection, i, len, ref, results;
+      var c, connection, i, len, ref;
       P.connections_add(event.data);
-      $('.filter-connections').html('');
+      $('.filter-connections .filterwindow').html('');
       c = 0;
       ref = P.connections_bin;
-      results = [];
       for (i = 0, len = ref.length; i < len; i++) {
         connection = ref[i];
         $('<div class="l l-' + c + '">' + connection + '</div>').appendTo('.filter-connections .filterwindow');
-        P.scroller();
-        results.push(c++);
+        c++;
       }
-      return results;
+      return P.scroller();
     };
   };
 

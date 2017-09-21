@@ -1,4 +1,4 @@
-all: pack-assets
+all:
 	clear
 	go build
 	./webinterface
