@@ -10,6 +10,8 @@ body { visibility: hidden }
 .filterwindow {
     white-space: pre-wrap;
     word-break: break-all;
+    max-height: 7em;
+    overflow: auto;
 }
 
 /* reset i386 contrast */
@@ -28,6 +30,4 @@ img {
 }
 
 .hero-unit {
-    max-height: 7em;
-    overflow: auto;
 }

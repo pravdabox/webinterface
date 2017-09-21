@@ -5,7 +5,7 @@
 
   P = window.P || {};
 
-  P.ws_endpoint = 'ws://192.168.42.1/ws-bin';
+  P.ws_endpoint = 'ws://localhost:8080/ws-bin';
 
   P.max_lines = 10;
 
@@ -14,7 +14,7 @@
     ws = new WebSocket(P.ws_endpoint + '/dns');
     c = 0;
     return ws.onmessage = function(event) {
-      $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo('.filter-dns');
+      $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo('.filter-dns .filterwindow');
       if ($('.filter-dns .l').length > P.max_lines) {
         $('.filter-dns .l-' + (c - P.max_lines)).remove();
       }
@@ -34,7 +34,7 @@
       results = [];
       for (i = 0, len = ref.length; i < len; i++) {
         connection = ref[i];
-        $('<div class="l l-' + c + '">' + connection + '</div>').appendTo('.filter-connections');
+        $('<div class="l l-' + c + '">' + connection + '</div>').appendTo('.filter-connections .filterwindow');
         results.push(c++);
       }
       return results;
@@ -57,7 +57,7 @@
     ws = new WebSocket(P.ws_endpoint + '/http');
     c = 0;
     return ws.onmessage = function(event) {
-      $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo('.filter-http');
+      $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo('.filter-http .filterwindow');
       if ($('.filter-http .l').length > P.max_lines) {
         $('.filter-http .l-' + (c - P.max_lines)).remove();
       }
@@ -70,7 +70,7 @@
     ws = new WebSocket(P.ws_endpoint + '/cookies');
     c = 0;
     return ws.onmessage = function(event) {
-      $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo('.filter-cookies');
+      $('<div class="l l-' + c + '">' + event.data + '</div>').appendTo('.filter-cookies .filterwindow');
       if ($('.filter-cookies .l').length > P.max_lines) {
         $('.filter-cookies .l-' + (c - P.max_lines)).remove();
       }
@@ -83,7 +83,7 @@
     ws = new WebSocket(P.ws_endpoint + '/images');
     c = 0;
     return ws.onmessage = function(event) {
-      $('<a href="/image/' + event.data + '" target="_blank"><img class="i i-' + c + '" src="/image/' + event.data + '"></a>').prependTo('.filter-images');
+      $('<a href="/image/' + event.data + '" target="_blank"><img class="i i-' + c + '" src="/image/' + event.data + '"></a>').prependTo('.filter-images .filterwindow');
       if ($('.filter-images .i').length > P.max_lines) {
         $('.filter-images .i-' + (c - P.max_lines)).remove();
       }
