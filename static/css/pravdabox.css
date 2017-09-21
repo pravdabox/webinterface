@@ -7,13 +7,6 @@ body { visibility: hidden }
     top: 40px;
 }
 
-.filterwindow {
-    white-space: pre-wrap;
-    word-break: break-all;
-    max-height: 120px;
-    overflow: auto;
-}
-
 /* reset i386 contrast */
 img {
   -webkit-filter: contrast(100%);
@@ -27,5 +20,16 @@ img {
     max-width: 200px;
     max-height: 200px;
     margin: 10px;
+}
+
+.filterwindow {
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 120px;
+    overflow: auto;
+}
+
+.filter-images .filterwindow {
+    max-height: 360px;
 }
 
