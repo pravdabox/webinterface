@@ -82,7 +82,8 @@ P.parse_formdata = (data) ->
     f = []
     i = 0
     for key in keys
-        f.push keys[i] + ': ' + '<strong>' + values[i] + '</strong>'
+        if keys[i] != 'method'
+            f.push keys[i] + ': ' + '<strong>' + values[i] + '</strong>'
         i++
     form = ip + '\t' + f.join ', '
     return form
