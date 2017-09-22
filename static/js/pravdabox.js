@@ -37,7 +37,7 @@
   P.dns_add = function(address) {
     if (indexOf.call(P.dns_bin, address) < 0) {
       P.dns_bin.push(address);
-      if (P.dns_bin.length > 10) {
+      if (P.dns_bin.length > P.max_lines) {
         P.dns_bin.shift();
       }
       return true;
@@ -70,7 +70,7 @@
   P.connections_add = function(connection) {
     if (indexOf.call(P.connections_bin, connection) < 0) {
       P.connections_bin.push(connection);
-      if (P.connections_bin.length > 10) {
+      if (P.connections_bin.length > P.max_lines) {
         P.connections_bin.shift();
       }
       return true;
@@ -119,7 +119,7 @@
   P.cookies_add = function(cookie) {
     if (indexOf.call(P.cookies_bin, cookie) < 0) {
       P.cookies_bin.push(cookie);
-      if (P.cookies_bin.length > 10) {
+      if (P.cookies_bin.length > P.max_lines) {
         P.cookies_bin.shift();
       }
       return true;

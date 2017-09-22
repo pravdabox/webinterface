@@ -24,7 +24,7 @@ P.dns_bin = []
 P.dns_add = (address) ->
     if address not in P.dns_bin
         P.dns_bin.push address
-        if P.dns_bin.length > 10
+        if P.dns_bin.length > P.max_lines
             P.dns_bin.shift()
         return true
     return false
@@ -46,7 +46,7 @@ P.connections_bin = []
 P.connections_add = (connection) ->
     if connection not in P.connections_bin
         P.connections_bin.push connection
-        if P.connections_bin.length > 10
+        if P.connections_bin.length > P.max_lines
             P.connections_bin.shift()
         return true
     return false
@@ -80,7 +80,7 @@ P.cookies_bin = []
 P.cookies_add = (cookie) ->
     if cookie not in P.cookies_bin
         P.cookies_bin.push cookie
-        if P.cookies_bin.length > 10
+        if P.cookies_bin.length > P.max_lines
             P.cookies_bin.shift()
         return true
     return false
