@@ -100,7 +100,7 @@ P.cookies = function() {
     var c, cookie, i, len, line, ref;
     line = P.colorize(event.data);
     if (P.cookies_add(line)) {
-      $('.filter-connections .filterwindow').html('');
+      $('.filter-cookies .filterwindow').html('');
       c = 0;
       ref = P.cookies_bin;
       for (i = 0, len = ref.length; i < len; i++) {

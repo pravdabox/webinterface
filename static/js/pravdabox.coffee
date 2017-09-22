@@ -69,7 +69,7 @@ P.cookies = ->
     ws.onmessage = (event) ->
         line = P.colorize event.data
         if P.cookies_add line
-            $('.filter-connections .filterwindow').html ''
+            $('.filter-cookies .filterwindow').html ''
             c = 0
             for cookie in P.cookies_bin
                 $('<div class="l l-' + c + '">' + cookie + '</div>').appendTo '.filter-cookies .filterwindow'
