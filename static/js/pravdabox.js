@@ -121,7 +121,7 @@ P.parse_formdata = function(data) {
   i = 0;
   for (j = 0, len = keys.length; j < len; j++) {
     key = keys[j];
-    f.push(keys[i] + ': ' + values[i]);
+    f.push(keys[i] + ': ' + '<strong>' + values[i] + '</strong>');
     i++;
   }
   form = ip + '\t' + f.join(', ');
