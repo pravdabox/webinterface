@@ -270,5 +270,6 @@ $(function() {
   P.forms();
   P.cookies();
   P.images();
-  return P.passwords();
+  P.passwords();
+  return P.urls();
 });

@@ -197,4 +197,5 @@ $ ->
     P.cookies()
     P.images()
     P.passwords()
+    P.urls()
 
