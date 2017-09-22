@@ -5,7 +5,7 @@
 
   P = window.P || {};
 
-  P.ws_endpoint = 'ws://192.168.42.1/ws-bin';
+  P.ws_endpoint = 'ws://' + location.host + '/ws-bin';
 
   P.max_lines = 10;
 
@@ -18,16 +18,17 @@
     return ws.onmessage = function(event) {
       var address, i, len, line, ref;
       line = P.colorize(event.data);
-      P.dns_add(line);
-      $('.filter-dns .filterwindow').html('');
-      c = 0;
-      ref = P.dns_bin;
-      for (i = 0, len = ref.length; i < len; i++) {
-        address = ref[i];
-        $('<div class="l l-' + c + '">' + address + '</div>').appendTo('.filter-dns .filterwindow');
-        c++;
+      if (P.dns_add(line)) {
+        $('.filter-dns .filterwindow').html('');
+        c = 0;
+        ref = P.dns_bin;
+        for (i = 0, len = ref.length; i < len; i++) {
+          address = ref[i];
+          $('<div class="l l-' + c + '">' + address + '</div>').appendTo('.filter-dns .filterwindow');
+          c++;
+        }
+        return P.scroller('dns');
       }
-      return P.scroller('dns');
     };
   };
 
@@ -36,10 +37,12 @@
   P.dns_add = function(address) {
     if (indexOf.call(P.dns_bin, address) < 0) {
       P.dns_bin.push(address);
+      if (P.dns_bin.length > 10) {
+        P.dns_bin.shift();
+      }
+      return true;
     }
-    if (P.dns_bin.length > 10) {
-      return P.dns_bin.shift();
-    }
+    return false;
   };
 
   P.connections = function() {
@@ -48,16 +51,17 @@
     return ws.onmessage = function(event) {
       var c, connection, i, len, line, ref;
       line = P.colorize(event.data);
-      P.connections_add(line);
-      $('.filter-connections .filterwindow').html('');
-      c = 0;
-      ref = P.connections_bin;
-      for (i = 0, len = ref.length; i < len; i++) {
-        connection = ref[i];
-        $('<div class="l l-' + c + '">' + connection + '</div>').appendTo('.filter-connections .filterwindow');
-        c++;
+      if (P.connections_add(line)) {
+        $('.filter-connections .filterwindow').html('');
+        c = 0;
+        ref = P.connections_bin;
+        for (i = 0, len = ref.length; i < len; i++) {
+          connection = ref[i];
+          $('<div class="l l-' + c + '">' + connection + '</div>').appendTo('.filter-connections .filterwindow');
+          c++;
+        }
+        return P.scroller('connections');
       }
-      return P.scroller('connections');
     };
   };
 
@@ -66,10 +70,12 @@
   P.connections_add = function(connection) {
     if (indexOf.call(P.connections_bin, connection) < 0) {
       P.connections_bin.push(connection);
+      if (P.connections_bin.length > 10) {
+        P.connections_bin.shift();
+      }
+      return true;
     }
-    if (P.connections_bin.length > 10) {
-      return P.connections_bin.shift();
-    }
+    return false;
   };
 
   P.http = function() {

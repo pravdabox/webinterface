@@ -1,8 +1,7 @@
 # Pravdabox namespace
 P = window.P || {}
 
-P.ws_endpoint = 'ws://192.168.42.1/ws-bin'
-#P.ws_endpoint = 'ws://localhost:8080/ws-bin'
+P.ws_endpoint = 'ws://' + location.host + '/ws-bin'
 
 P.max_lines = 10
 P.howmanycolors = 7
@@ -13,44 +12,44 @@ P.dns = ->
     c = 0
     ws.onmessage = (event) ->
         line = P.colorize event.data
-        P.dns_add line
-
-        $('.filter-dns .filterwindow').html ''
-
-        c = 0
-        for address in P.dns_bin
-            $('<div class="l l-' + c + '">' + address + '</div>').appendTo '.filter-dns .filterwindow'
-            c++
-        P.scroller 'dns'
+        if P.dns_add line
+            $('.filter-dns .filterwindow').html ''
+            c = 0
+            for address in P.dns_bin
+                $('<div class="l l-' + c + '">' + address + '</div>').appendTo '.filter-dns .filterwindow'
+                c++
+            P.scroller 'dns'
 
 P.dns_bin = []
 P.dns_add = (address) ->
     if address not in P.dns_bin
         P.dns_bin.push address
-    if P.dns_bin.length > 10
-        P.dns_bin.shift()
+        if P.dns_bin.length > 10
+            P.dns_bin.shift()
+        return true
+    return false
 
 P.connections = ->
     ws = new WebSocket P.ws_endpoint + '/connections'
 
     ws.onmessage = (event) ->
         line = P.colorize event.data
-        P.connections_add line
-
-        $('.filter-connections .filterwindow').html ''
-
-        c = 0
-        for connection in P.connections_bin
-            $('<div class="l l-' + c + '">' + connection + '</div>').appendTo '.filter-connections .filterwindow'
-            c++
-        P.scroller 'connections'
+        if P.connections_add line
+            $('.filter-connections .filterwindow').html ''
+            c = 0
+            for connection in P.connections_bin
+                $('<div class="l l-' + c + '">' + connection + '</div>').appendTo '.filter-connections .filterwindow'
+                c++
+            P.scroller 'connections'
 
 P.connections_bin = []
 P.connections_add = (connection) ->
     if connection not in P.connections_bin
         P.connections_bin.push connection
-    if P.connections_bin.length > 10
-        P.connections_bin.shift()
+        if P.connections_bin.length > 10
+            P.connections_bin.shift()
+        return true
+    return false
 
 P.http = ->
     ws = new WebSocket P.ws_endpoint + '/http'
@@ -118,3 +117,4 @@ $ ->
     P.http()
     P.cookies()
     P.images()
+
