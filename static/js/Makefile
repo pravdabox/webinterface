@@ -1,5 +1,5 @@
 
 all:
-	coffee -c pravdabox.coffee
+	coffee -b -c pravdabox.coffee
 
 .PHONY: *
