@@ -95,19 +95,36 @@
   };
 
   P.cookies = function() {
-    var c, ws;
+    var ws;
     ws = new WebSocket(P.ws_endpoint + '/cookies');
-    c = 0;
     return ws.onmessage = function(event) {
-      var line;
+      var c, cookie, i, len, line, ref;
       line = P.colorize(event.data);
-      $('<div class="l l-' + c + '">' + line + '</div>').appendTo('.filter-cookies .filterwindow');
-      if ($('.filter-cookies .l').length > P.max_lines) {
-        $('.filter-cookies .l-' + (c - P.max_lines)).remove();
+      if (P.cookies_add(line)) {
+        $('.filter-connections .filterwindow').html('');
+        c = 0;
+        ref = P.cookies_bin;
+        for (i = 0, len = ref.length; i < len; i++) {
+          cookie = ref[i];
+          $('<div class="l l-' + c + '">' + cookie + '</div>').appendTo('.filter-cookies .filterwindow');
+          c++;
+        }
+        return P.scroller('cookies');
       }
-      P.scroller('cookies');
-      return c++;
     };
+  };
+
+  P.cookies_bin = [];
+
+  P.cookies_add = function(cookie) {
+    if (indexOf.call(P.cookies_bin, cookie) < 0) {
+      P.cookies_bin.push(cookie);
+      if (P.cookies_bin.length > 10) {
+        P.cookies_bin.shift();
+      }
+      return true;
+    }
+    return false;
   };
 
   P.images = function() {

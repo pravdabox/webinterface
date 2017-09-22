@@ -66,14 +66,24 @@ P.http = ->
 P.cookies = ->
     ws = new WebSocket P.ws_endpoint + '/cookies'
 
-    c = 0
     ws.onmessage = (event) ->
         line = P.colorize event.data
-        $('<div class="l l-' + c + '">' + line + '</div>').appendTo '.filter-cookies .filterwindow'
-        if $('.filter-cookies .l').length > P.max_lines
-            $('.filter-cookies .l-' + (c - P.max_lines)).remove()
-        P.scroller 'cookies'
-        c++
+        if P.cookies_add line
+            $('.filter-connections .filterwindow').html ''
+            c = 0
+            for cookie in P.cookies_bin
+                $('<div class="l l-' + c + '">' + cookie + '</div>').appendTo '.filter-cookies .filterwindow'
+                c++
+            P.scroller 'cookies'
+
+P.cookies_bin = []
+P.cookies_add = (cookie) ->
+    if cookie not in P.cookies_bin
+        P.cookies_bin.push cookie
+        if P.cookies_bin.length > 10
+            P.cookies_bin.shift()
+        return true
+    return false
 
 P.images = ->
     ws = new WebSocket P.ws_endpoint + '/images'
