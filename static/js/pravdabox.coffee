@@ -124,14 +124,24 @@ P.images = ->
 P.passwords = ->
     ws = new WebSocket P.ws_endpoint + '/passwords'
 
-    c = 0
     ws.onmessage = (event) ->
         line = P.colorize event.data
-        $('<div class="l l-' + c + '">' + line + '</div>').appendTo '.filter-passwords .filterwindow'
-        if $('.filter-passwords .i').length > P.max_lines
-            $('.filter-passwords .i-' + (c - P.max_lines)).remove()
-        P.scroller 'passwords'
-        c++
+        if P.passwords_add line
+            $('.filter-passwords .filterwindow').html ''
+            c = 0
+            for password in P.passwords_bin
+                $('<div class="l l-' + c + '">' + password + '</div>').appendTo '.filter-passwords .filterwindow'
+                c++
+            P.scroller 'passwords'
+
+P.passwords_bin = []
+P.passwords_add = (password) ->
+    if password not in P.passwords_bin
+        P.passwords_bin.push password
+        if P.passwords_bin.length > P.max_lines
+            P.passwords_bin.shift()
+        return true
+    return false
 
 P.scroller = (filter) ->
     $('.filter-' + filter + ' .filterwindow').animate

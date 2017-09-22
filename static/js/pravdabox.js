@@ -178,19 +178,36 @@ P.images = function() {
 };
 
 P.passwords = function() {
-  var c, ws;
+  var ws;
   ws = new WebSocket(P.ws_endpoint + '/passwords');
-  c = 0;
   return ws.onmessage = function(event) {
-    var line;
+    var c, j, len, line, password, ref;
     line = P.colorize(event.data);
-    $('<div class="l l-' + c + '">' + line + '</div>').appendTo('.filter-passwords .filterwindow');
-    if ($('.filter-passwords .i').length > P.max_lines) {
-      $('.filter-passwords .i-' + (c - P.max_lines)).remove();
+    if (P.passwords_add(line)) {
+      $('.filter-passwords .filterwindow').html('');
+      c = 0;
+      ref = P.passwords_bin;
+      for (j = 0, len = ref.length; j < len; j++) {
+        password = ref[j];
+        $('<div class="l l-' + c + '">' + password + '</div>').appendTo('.filter-passwords .filterwindow');
+        c++;
+      }
+      return P.scroller('passwords');
     }
-    P.scroller('passwords');
-    return c++;
   };
+};
+
+P.passwords_bin = [];
+
+P.passwords_add = function(password) {
+  if (indexOf.call(P.passwords_bin, password) < 0) {
+    P.passwords_bin.push(password);
+    if (P.passwords_bin.length > P.max_lines) {
+      P.passwords_bin.shift();
+    }
+    return true;
+  }
+  return false;
 };
 
 P.scroller = function(filter) {
