@@ -55,7 +55,9 @@ P.forms = ->
     ws = new WebSocket P.ws_endpoint + '/forms'
 
     ws.onmessage = (event) ->
-        line = P.colorize event.data
+        line = event.data
+        line = P.parse_formdata line
+        line = P.colorize line
         if P.forms_add line
             $('.filter-forms .filterwindow').html ''
             c = 0
@@ -72,6 +74,18 @@ P.forms_add = (form) ->
             P.forms_bin.shift()
         return true
     return false
+
+P.parse_formdata = (data) ->
+    ip = data.split('\t')[0]
+    keys = data.split('\t')[1].split(',')
+    values = data.split('\t')[2].split(',')
+    f = []
+    i = 0
+    for key in keys
+        f.push keys[i] + ': ' + values[i]
+        i++
+    form = ip + '\t' + f.join ', '
+    return form
 
 P.cookies = ->
     ws = new WebSocket P.ws_endpoint + '/cookies'

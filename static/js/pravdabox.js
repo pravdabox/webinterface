@@ -15,14 +15,14 @@ P.dns = function() {
   ws = new WebSocket(P.ws_endpoint + '/dns');
   c = 0;
   return ws.onmessage = function(event) {
-    var address, i, len, line, ref;
+    var address, j, len, line, ref;
     line = P.colorize(event.data);
     if (P.dns_add(line)) {
       $('.filter-dns .filterwindow').html('');
       c = 0;
       ref = P.dns_bin;
-      for (i = 0, len = ref.length; i < len; i++) {
-        address = ref[i];
+      for (j = 0, len = ref.length; j < len; j++) {
+        address = ref[j];
         $('<div class="l l-' + c + '">' + address + '</div>').appendTo('.filter-dns .filterwindow');
         c++;
       }
@@ -48,14 +48,14 @@ P.connections = function() {
   var ws;
   ws = new WebSocket(P.ws_endpoint + '/connections');
   return ws.onmessage = function(event) {
-    var c, connection, i, len, line, ref;
+    var c, connection, j, len, line, ref;
     line = P.colorize(event.data);
     if (P.connections_add(line)) {
       $('.filter-connections .filterwindow').html('');
       c = 0;
       ref = P.connections_bin;
-      for (i = 0, len = ref.length; i < len; i++) {
-        connection = ref[i];
+      for (j = 0, len = ref.length; j < len; j++) {
+        connection = ref[j];
         $('<div class="l l-' + c + '">' + connection + '</div>').appendTo('.filter-connections .filterwindow');
         c++;
       }
@@ -81,14 +81,16 @@ P.forms = function() {
   var ws;
   ws = new WebSocket(P.ws_endpoint + '/forms');
   return ws.onmessage = function(event) {
-    var c, form, i, len, line, ref;
-    line = P.colorize(event.data);
+    var c, form, j, len, line, ref;
+    line = event.data;
+    line = P.parse_formdata(line);
+    line = P.colorize(line);
     if (P.forms_add(line)) {
       $('.filter-forms .filterwindow').html('');
       c = 0;
       ref = P.forms_bin;
-      for (i = 0, len = ref.length; i < len; i++) {
-        form = ref[i];
+      for (j = 0, len = ref.length; j < len; j++) {
+        form = ref[j];
         $('<div class="l l-' + c + '">' + form + '</div>').appendTo('.filter-forms .filterwindow');
         c++;
       }
@@ -110,18 +112,34 @@ P.forms_add = function(form) {
   return false;
 };
 
+P.parse_formdata = function(data) {
+  var f, form, i, ip, j, key, keys, len, values;
+  ip = data.split('\t')[0];
+  keys = data.split('\t')[1].split(',');
+  values = data.split('\t')[2].split(',');
+  f = [];
+  i = 0;
+  for (j = 0, len = keys.length; j < len; j++) {
+    key = keys[j];
+    f.push(keys[i] + ': ' + values[i]);
+    i++;
+  }
+  form = ip + '\t' + f.join(', ');
+  return form;
+};
+
 P.cookies = function() {
   var ws;
   ws = new WebSocket(P.ws_endpoint + '/cookies');
   return ws.onmessage = function(event) {
-    var c, cookie, i, len, line, ref;
+    var c, cookie, j, len, line, ref;
     line = P.colorize(event.data);
     if (P.cookies_add(line)) {
       $('.filter-cookies .filterwindow').html('');
       c = 0;
       ref = P.cookies_bin;
-      for (i = 0, len = ref.length; i < len; i++) {
-        cookie = ref[i];
+      for (j = 0, len = ref.length; j < len; j++) {
+        cookie = ref[j];
         $('<div class="l l-' + c + '">' + cookie + '</div>').appendTo('.filter-cookies .filterwindow');
         c++;
       }
