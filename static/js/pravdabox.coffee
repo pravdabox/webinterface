@@ -121,6 +121,18 @@ P.images = ->
         P.scroller 'images'
         c++
 
+P.passwords = ->
+    ws = new WebSocket P.ws_endpoint + '/passwords'
+
+    c = 0
+    ws.onmessage = (event) ->
+        line = P.colorize event.data
+        $('<div class="l l-' + c + '">' + line + '</div>').appendTo '.filter-passwords .filterwindow'
+        if $('.filter-passwords .i').length > P.max_lines
+            $('.filter-passwords .i-' + (c - P.max_lines)).remove()
+        P.scroller 'passwords'
+        c++
+
 P.scroller = (filter) ->
     $('.filter-' + filter + ' .filterwindow').animate
         scrollTop: 10000
@@ -152,4 +164,5 @@ $ ->
     P.forms()
     P.cookies()
     P.images()
+    P.passwords()
 

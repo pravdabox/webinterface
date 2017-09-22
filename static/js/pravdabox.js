@@ -177,6 +177,22 @@ P.images = function() {
   };
 };
 
+P.passwords = function() {
+  var c, ws;
+  ws = new WebSocket(P.ws_endpoint + '/passwords');
+  c = 0;
+  return ws.onmessage = function(event) {
+    var line;
+    line = P.colorize(event.data);
+    $('<div class="l l-' + c + '">' + line + '</div>').appendTo('.filter-passwords .filterwindow');
+    if ($('.filter-passwords .i').length > P.max_lines) {
+      $('.filter-passwords .i-' + (c - P.max_lines)).remove();
+    }
+    P.scroller('passwords');
+    return c++;
+  };
+};
+
 P.scroller = function(filter) {
   return $('.filter-' + filter + ' .filterwindow').animate({
     scrollTop: 10000
@@ -203,5 +219,6 @@ $(function() {
   P.connections();
   P.forms();
   P.cookies();
-  return P.images();
+  P.images();
+  return P.passwords();
 });
