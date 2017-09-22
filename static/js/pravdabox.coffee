@@ -3,7 +3,7 @@ P = window.P || {}
 
 P.ws_endpoint = 'ws://' + location.host + '/ws-bin'
 
-P.max_lines = 10
+P.max_lines = 20
 P.howmanycolors = 7
 
 P.dns = ->
