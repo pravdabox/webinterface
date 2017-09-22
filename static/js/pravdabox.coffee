@@ -51,16 +51,16 @@ P.connections_add = (connection) ->
         return true
     return false
 
-P.http = ->
-    ws = new WebSocket P.ws_endpoint + '/http'
+P.forms = ->
+    ws = new WebSocket P.ws_endpoint + '/forms'
 
     c = 0
     ws.onmessage = (event) ->
         line = P.colorize event.data
-        $('<div class="l l-' + c + '">' + line + '</div>').appendTo '.filter-http .filterwindow'
-        if $('.filter-http .l').length > P.max_lines
-            $('.filter-http .l-' + (c - P.max_lines)).remove()
-        P.scroller 'http'
+        $('<div class="l l-' + c + '">' + line + '</div>').appendTo '.filter-forms .filterwindow'
+        if $('.filter-forms .l').length > P.max_lines
+            $('.filter-forms .l-' + (c - P.max_lines)).remove()
+        P.scroller 'forms'
         c++
 
 P.cookies = ->
@@ -124,7 +124,7 @@ P.colorize = (block_with_ip) ->
 $ ->
     P.dns()
     P.connections()
-    P.http()
+    P.forms()
     P.cookies()
     P.images()
 

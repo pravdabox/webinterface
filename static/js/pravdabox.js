@@ -77,18 +77,18 @@ P.connections_add = function(connection) {
   return false;
 };
 
-P.http = function() {
+P.forms = function() {
   var c, ws;
-  ws = new WebSocket(P.ws_endpoint + '/http');
+  ws = new WebSocket(P.ws_endpoint + '/forms');
   c = 0;
   return ws.onmessage = function(event) {
     var line;
     line = P.colorize(event.data);
-    $('<div class="l l-' + c + '">' + line + '</div>').appendTo('.filter-http .filterwindow');
-    if ($('.filter-http .l').length > P.max_lines) {
-      $('.filter-http .l-' + (c - P.max_lines)).remove();
+    $('<div class="l l-' + c + '">' + line + '</div>').appendTo('.filter-forms .filterwindow');
+    if ($('.filter-forms .l').length > P.max_lines) {
+      $('.filter-forms .l-' + (c - P.max_lines)).remove();
     }
-    P.scroller('http');
+    P.scroller('forms');
     return c++;
   };
 };
@@ -164,7 +164,7 @@ P.colorize = function(block_with_ip) {
 $(function() {
   P.dns();
   P.connections();
-  P.http();
+  P.forms();
   P.cookies();
   return P.images();
 });
