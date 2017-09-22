@@ -143,6 +143,28 @@ P.passwords_add = (password) ->
         return true
     return false
 
+P.urls = ->
+    ws = new WebSocket P.ws_endpoint + '/urls'
+
+    ws.onmessage = (event) ->
+        line = P.colorize event.data
+        if P.urls_add line
+            $('.filter-urls .filterwindow').html ''
+            c = 0
+            for url in P.urls_bin
+                $('<div class="l l-' + c + '">' + url + '</div>').appendTo '.filter-urls .filterwindow'
+                c++
+            P.scroller 'urls'
+
+P.urls_bin = []
+P.urls_add = (url) ->
+    if url not in P.urls_bin
+        P.urls_bin.push url
+        if P.urls_bin.length > P.max_lines
+            P.urls_bin.shift()
+        return true
+    return false
+
 P.scroller = (filter) ->
     $('.filter-' + filter + ' .filterwindow').animate
         scrollTop: 10000

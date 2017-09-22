@@ -210,6 +210,39 @@ P.passwords_add = function(password) {
   return false;
 };
 
+P.urls = function() {
+  var ws;
+  ws = new WebSocket(P.ws_endpoint + '/urls');
+  return ws.onmessage = function(event) {
+    var c, j, len, line, ref, url;
+    line = P.colorize(event.data);
+    if (P.urls_add(line)) {
+      $('.filter-urls .filterwindow').html('');
+      c = 0;
+      ref = P.urls_bin;
+      for (j = 0, len = ref.length; j < len; j++) {
+        url = ref[j];
+        $('<div class="l l-' + c + '">' + url + '</div>').appendTo('.filter-urls .filterwindow');
+        c++;
+      }
+      return P.scroller('urls');
+    }
+  };
+};
+
+P.urls_bin = [];
+
+P.urls_add = function(url) {
+  if (indexOf.call(P.urls_bin, url) < 0) {
+    P.urls_bin.push(url);
+    if (P.urls_bin.length > P.max_lines) {
+      P.urls_bin.shift();
+    }
+    return true;
+  }
+  return false;
+};
+
 P.scroller = function(filter) {
   return $('.filter-' + filter + ' .filterwindow').animate({
     scrollTop: 10000
