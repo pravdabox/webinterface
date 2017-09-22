@@ -78,19 +78,36 @@ P.connections_add = function(connection) {
 };
 
 P.forms = function() {
-  var c, ws;
+  var ws;
   ws = new WebSocket(P.ws_endpoint + '/forms');
-  c = 0;
   return ws.onmessage = function(event) {
-    var line;
+    var c, form, i, len, line, ref;
     line = P.colorize(event.data);
-    $('<div class="l l-' + c + '">' + line + '</div>').appendTo('.filter-forms .filterwindow');
-    if ($('.filter-forms .l').length > P.max_lines) {
-      $('.filter-forms .l-' + (c - P.max_lines)).remove();
+    if (P.forms_add(line)) {
+      $('.filter-forms .filterwindow').html('');
+      c = 0;
+      ref = P.forms_bin;
+      for (i = 0, len = ref.length; i < len; i++) {
+        form = ref[i];
+        $('<div class="l l-' + c + '">' + form + '</div>').appendTo('.filter-forms .filterwindow');
+        c++;
+      }
+      return P.scroller('forms');
     }
-    P.scroller('forms');
-    return c++;
   };
+};
+
+P.forms_bin = [];
+
+P.forms_add = function(form) {
+  if (indexOf.call(P.forms_bin, form) < 0) {
+    P.forms_bin.push(form);
+    if (P.forms_bin.length > P.max_lines) {
+      P.forms_bin.shift();
+    }
+    return true;
+  }
+  return false;
 };
 
 P.cookies = function() {

@@ -54,14 +54,24 @@ P.connections_add = (connection) ->
 P.forms = ->
     ws = new WebSocket P.ws_endpoint + '/forms'
 
-    c = 0
     ws.onmessage = (event) ->
         line = P.colorize event.data
-        $('<div class="l l-' + c + '">' + line + '</div>').appendTo '.filter-forms .filterwindow'
-        if $('.filter-forms .l').length > P.max_lines
-            $('.filter-forms .l-' + (c - P.max_lines)).remove()
-        P.scroller 'forms'
-        c++
+        if P.forms_add line
+            $('.filter-forms .filterwindow').html ''
+            c = 0
+            for form in P.forms_bin
+                $('<div class="l l-' + c + '">' + form + '</div>').appendTo '.filter-forms .filterwindow'
+                c++
+            P.scroller 'forms'
+
+P.forms_bin = []
+P.forms_add = (form) ->
+    if form not in P.forms_bin
+        P.forms_bin.push form
+        if P.forms_bin.length > P.max_lines
+            P.forms_bin.shift()
+        return true
+    return false
 
 P.cookies = ->
     ws = new WebSocket P.ws_endpoint + '/cookies'
