@@ -8,6 +8,7 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+	"os/exec"
 	s "strings"
 	"time"
 )
@@ -115,6 +116,11 @@ func webserver() {
 			Title: "Pravdabox - Firmwareupdate",
 		}
 		renderTemplate(rw, "templates/firmwareupdate.html", &model)
+	})
+
+	// firmwareupdate
+	http.HandleFunc("/firmwareupdate-run", func(rw http.ResponseWriter, req *http.Request) {
+		exec.Command("/usr/sbin/upgrader")
 	})
 
 	// upgrade
