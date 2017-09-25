@@ -174,12 +174,13 @@ P.firmwareupgrade = ->
 
         ws.onclose = (event) ->
             $('<div class="l">Writing in process, please wait...</div>').appendTo '.firmwareupgrade'
-            try
-                startInterval ->
+            startInterval ->
+                try
                     $.ajax
+                        url: location.host
                         success: ->
                             location.href = location.host
-                , 1000
+            , 1000
 
         $('#start_firmwareupgrade').remove()
         return false

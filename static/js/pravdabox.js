@@ -252,15 +252,16 @@ P.firmwareupgrade = function() {
     };
     ws.onclose = function(event) {
       $('<div class="l">Writing in process, please wait...</div>').appendTo('.firmwareupgrade');
-      try {
-        return startInterval(function() {
+      return startInterval(function() {
+        try {
           return $.ajax({
+            url: location.host,
             success: function() {
               return location.href = location.host;
             }
           });
-        }, 1000);
-      } catch (error) {}
+        } catch (error) {}
+      }, 1000);
     };
     $('#start_firmwareupgrade').remove();
     return false;
