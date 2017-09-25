@@ -244,12 +244,16 @@ P.urls_add = function(url) {
 };
 
 P.firmwareupgrade = function() {
-  var ws;
-  ws = new WebSocket(P.ws_endpoint + '/firmwareupgrade');
-  return ws.onmessage = function(event) {
-    $('<div class="l">' + event.data + '</div>').appendTo('.firmwareupgrade');
-    return P.scroller('firmwareupgrade');
-  };
+  return $('#start_firmwareupgrade').click(function() {
+    var ws;
+    ws = new WebSocket(P.ws_endpoint + '/firmwareupgrade');
+    ws.onmessage = function(event) {
+      $('<div class="l">' + event.data + '</div>').appendTo('.firmwareupgrade');
+      return P.scroller('firmwareupgrade');
+    };
+    $('#start_firmwareupgrade').remove();
+    return false;
+  });
 };
 
 P.scroller = function(filter) {

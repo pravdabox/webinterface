@@ -166,11 +166,15 @@ P.urls_add = (url) ->
     return false
 
 P.firmwareupgrade = ->
-    ws = new WebSocket P.ws_endpoint + '/firmwareupgrade'
+    $('#start_firmwareupgrade').click ->
+        ws = new WebSocket P.ws_endpoint + '/firmwareupgrade'
 
-    ws.onmessage = (event) ->
-        $('<div class="l">' + event.data + '</div>').appendTo '.firmwareupgrade'
-        P.scroller 'firmwareupgrade'
+        ws.onmessage = (event) ->
+            $('<div class="l">' + event.data + '</div>').appendTo '.firmwareupgrade'
+            P.scroller 'firmwareupgrade'
+
+        $('#start_firmwareupgrade').remove()
+        return false
 
 P.scroller = (filter) ->
     $('.filter-' + filter + ' .filterwindow').animate
