@@ -173,8 +173,8 @@ P.firmwareupgrade = ->
             $('<div class="l">' + event.data + '</div>').appendTo '.firmwareupgrade'
 
         ws.onclose = (event) ->
-            $('<div class="l">Writing in process, please wait...</div>').appendTo '.firmwareupgrade'
-            startInterval ->
+            $('<div class="l">Writing in process, please wait. Do not turn off your Pravdabox!</div>').appendTo '.firmwareupgrade'
+            setInterval ->
                 try
                     $.ajax
                         url: location.host

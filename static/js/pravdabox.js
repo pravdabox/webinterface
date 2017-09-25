@@ -251,8 +251,8 @@ P.firmwareupgrade = function() {
       return $('<div class="l">' + event.data + '</div>').appendTo('.firmwareupgrade');
     };
     ws.onclose = function(event) {
-      $('<div class="l">Writing in process, please wait...</div>').appendTo('.firmwareupgrade');
-      return startInterval(function() {
+      $('<div class="l">Writing in process, please wait. Do not turn off your Pravdabox!</div>').appendTo('.firmwareupgrade');
+      return setInterval(function() {
         try {
           return $.ajax({
             url: location.host,
