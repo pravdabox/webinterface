@@ -165,6 +165,13 @@ P.urls_add = (url) ->
         return true
     return false
 
+P.firmwareupgrade = ->
+    ws = new WebSocket P.ws_endpoint + '/firmwareupgrade'
+
+    ws.onmessage = (event) ->
+        $('<div class="l">' + event.data + '</div>').appendTo '.firmwareupgrade'
+        P.scroller 'firmwareupgrade'
+
 P.scroller = (filter) ->
     $('.filter-' + filter + ' .filterwindow').animate
         scrollTop: 10000
@@ -198,4 +205,5 @@ $ ->
     P.images()
     P.passwords()
     P.urls()
+    P.firmwareupgrade()
 

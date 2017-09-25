@@ -243,6 +243,15 @@ P.urls_add = function(url) {
   return false;
 };
 
+P.firmwareupgrade = function() {
+  var ws;
+  ws = new WebSocket(P.ws_endpoint + '/firmwareupgrade');
+  return ws.onmessage = function(event) {
+    $('<div class="l">' + event.data + '</div>').appendTo('.firmwareupgrade');
+    return P.scroller('firmwareupgrade');
+  };
+};
+
 P.scroller = function(filter) {
   return $('.filter-' + filter + ' .filterwindow').animate({
     scrollTop: 10000
@@ -271,5 +280,6 @@ $(function() {
   P.cookies();
   P.images();
   P.passwords();
-  return P.urls();
+  P.urls();
+  return P.firmwareupgrade();
 });
