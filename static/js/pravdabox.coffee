@@ -177,9 +177,9 @@ P.firmwareupgrade = ->
             setInterval ->
                 try
                     $.ajax
-                        url: location.host
+                        url: 'http://' + location.host
                         success: ->
-                            location.href = location.host
+                            location.href = 'http://' + location.host
             , 1000
 
         $('#start_firmwareupgrade').remove()

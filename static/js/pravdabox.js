@@ -255,9 +255,9 @@ P.firmwareupgrade = function() {
       return setInterval(function() {
         try {
           return $.ajax({
-            url: location.host,
+            url: 'http://' + location.host,
             success: function() {
-              return location.href = location.host;
+              return location.href = 'http://' + location.host;
             }
           });
         } catch (error) {}
