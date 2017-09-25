@@ -248,14 +248,19 @@ P.firmwareupgrade = function() {
     var ws;
     ws = new WebSocket(P.ws_endpoint + '/firmwareupgrade');
     ws.onmessage = function(event) {
-      $('<div class="l">' + event.data + '</div>').appendTo('.firmwareupgrade');
-      return P.scroller('firmwareupgrade');
-    };
-    ws.onerror = function(event) {
-      return console.log('error');
+      return $('<div class="l">' + event.data + '</div>').appendTo('.firmwareupgrade');
     };
     ws.onclose = function(event) {
-      return console.log('close');
+      $('<div class="l">Writing in process, please wait...</div>').appendTo('.firmwareupgrade');
+      try {
+        return startInterval(function() {
+          return $.ajax({
+            success: function() {
+              return location.href = location.host;
+            }
+          });
+        }, 1000);
+      } catch (error) {}
     };
     $('#start_firmwareupgrade').remove();
     return false;

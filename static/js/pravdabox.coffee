@@ -171,13 +171,15 @@ P.firmwareupgrade = ->
 
         ws.onmessage = (event) ->
             $('<div class="l">' + event.data + '</div>').appendTo '.firmwareupgrade'
-            P.scroller 'firmwareupgrade'
-
-        ws.onerror = (event) ->
-            console.log 'error'
 
         ws.onclose = (event) ->
-            console.log 'close'
+            $('<div class="l">Writing in process, please wait...</div>').appendTo '.firmwareupgrade'
+            try
+                startInterval ->
+                    $.ajax
+                        success: ->
+                            location.href = location.host
+                , 1000
 
         $('#start_firmwareupgrade').remove()
         return false
