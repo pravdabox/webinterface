@@ -173,6 +173,12 @@ P.firmwareupgrade = ->
             $('<div class="l">' + event.data + '</div>').appendTo '.firmwareupgrade'
             P.scroller 'firmwareupgrade'
 
+        ws.onerror = (event) ->
+            console.log 'error'
+
+        ws.onclose = (event) ->
+            console.log 'close'
+
         $('#start_firmwareupgrade').remove()
         return false
 

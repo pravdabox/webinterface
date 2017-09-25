@@ -251,6 +251,12 @@ P.firmwareupgrade = function() {
       $('<div class="l">' + event.data + '</div>').appendTo('.firmwareupgrade');
       return P.scroller('firmwareupgrade');
     };
+    ws.onerror = function(event) {
+      return console.log('error');
+    };
+    ws.onclose = function(event) {
+      return console.log('close');
+    };
     $('#start_firmwareupgrade').remove();
     return false;
   });
