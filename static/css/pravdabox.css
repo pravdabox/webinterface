@@ -1,9 +1,14 @@
 
 /* for the bildaufbau */
-body { visibility: hidden }
+body { visibility: hidden; }
 
 /* no scrollbars for the map */
-body { overflow: hidden }
+body { overflow: hidden; }
+
+/* no blue i386 background */
+body, #wrap386, #bar386 {
+    background-color: #000;
+}
 
 /* fix menu position */
 .open > .dropdown-menu {
