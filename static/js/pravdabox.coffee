@@ -211,41 +211,40 @@ P.colorize = (block_with_ip) ->
     return block_with_ip
 
 P.map =
-    init: ->
-        markers = []
+    data: null
+    markers: []
 
-        # size
-        P.map.scale_to_window()
+    fetch_mapdata: (done) ->
         $.get 'static/js/world.json', (data) ->
-            $('.map').smallworld
-                geojson: data
-                zoom: 2
-                waterColor: '#021019'
-                landColor: '#08304b'
+            P.map.data = data
+            done()
 
-            setTimeout ->
-                $('.map').html('')
-                lat = $('.map').data('lat')
-                lng = $('.map').data('long')
-                markers.push([lat, lng])
+    init: ->
+        P.map.fetch_mapdata ->
+            P.map.render()
 
-                $('.map').smallworld
-                    geojson: data
-                    zoom: 2
-                    waterColor: '#021019'
-                    landColor: '#08304b'
-                    markers: markers
-                    markerSize: 8
-                    markerColor: '#fe0'
-            , 10
+    render: ->
+        P.map.scale_to_window()
+        $('.map').html('')
+        $('.map').smallworld
+            geojson: P.map.data
+            zoom: 2
+            waterColor: '#021019'
+            landColor: '#08304b'
+            markers: P.map.markers
+            markerSize: 8
+            markerColor: '#fe0'
+
+    update_markers: ->
+        lat = $('.map').data('lat')
+        lng = $('.map').data('long')
+        P.map.markers.push([lat, lng])
+        P.map.render()
 
     scale_to_window: ->
-        w = $(window).width()
-        h = $(window).height()
         $('.map, .map canvas').css
-            width: w
-            height: h
-        console.info w, h
+            width: $(window).width()
+            height: $(window).height()
 
 $ ->
     P.dns()
@@ -259,5 +258,5 @@ $ ->
     P.map.init()
 
     $(window).resize ->
-        P.map.init()
+        P.map.render()
 

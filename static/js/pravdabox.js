@@ -290,44 +290,44 @@ P.colorize = function(block_with_ip) {
 };
 
 P.map = {
-  init: function() {
-    var markers;
-    markers = [];
-    P.map.scale_to_window();
+  data: null,
+  markers: [],
+  fetch_mapdata: function(done) {
     return $.get('static/js/world.json', function(data) {
-      $('.map').smallworld({
-        geojson: data,
-        zoom: 2,
-        waterColor: '#021019',
-        landColor: '#08304b'
-      });
-      return setTimeout(function() {
-        var lat, lng;
-        $('.map').html('');
-        lat = $('.map').data('lat');
-        lng = $('.map').data('long');
-        markers.push([lat, lng]);
-        return $('.map').smallworld({
-          geojson: data,
-          zoom: 2,
-          waterColor: '#021019',
-          landColor: '#08304b',
-          markers: markers,
-          markerSize: 8,
-          markerColor: '#fe0'
-        });
-      }, 10);
+      P.map.data = data;
+      return done();
     });
   },
-  scale_to_window: function() {
-    var h, w;
-    w = $(window).width();
-    h = $(window).height();
-    $('.map, .map canvas').css({
-      width: w,
-      height: h
+  init: function() {
+    return P.map.fetch_mapdata(function() {
+      return P.map.render();
     });
-    return console.info(w, h);
+  },
+  render: function() {
+    P.map.scale_to_window();
+    $('.map').html('');
+    return $('.map').smallworld({
+      geojson: P.map.data,
+      zoom: 2,
+      waterColor: '#021019',
+      landColor: '#08304b',
+      markers: P.map.markers,
+      markerSize: 8,
+      markerColor: '#fe0'
+    });
+  },
+  update_markers: function() {
+    var lat, lng;
+    lat = $('.map').data('lat');
+    lng = $('.map').data('long');
+    P.map.markers.push([lat, lng]);
+    return P.map.render();
+  },
+  scale_to_window: function() {
+    return $('.map, .map canvas').css({
+      width: $(window).width(),
+      height: $(window).height()
+    });
   }
 };
 
@@ -342,6 +342,6 @@ $(function() {
   P.firmwareupgrade();
   P.map.init();
   return $(window).resize(function() {
-    return P.map.init();
+    return P.map.render();
   });
 });
