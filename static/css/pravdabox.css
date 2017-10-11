@@ -61,7 +61,7 @@ img {
 
 .widget-connections {
     left: 20px;
-    top: 120px;
+    top: 160px;
 }
 
 .widget-cookies {
@@ -71,12 +71,12 @@ img {
 
 .widget-forms {
     right: 20px;
-    top: 120px;
+    top: 160px;
 }
 
 .widget-passwords {
     right: 20px;
-    top: 200px;
+    top: 280px;
 }
 
 .widget-urls {
@@ -95,23 +95,30 @@ img {
 
 .widget .head {
     color: #fff;
-    background-color: rgba(255, 255, 0, 0.6);
-    border: 1px solid red;
+    background-color: rgba(0, 0, 255, 0.6);
+    border-top: 2px solid #66f;
+    border-left: 2px solid #66f;
+    border-right: 2px solid #66f;
     padding: 5px 10px 5px;
-  -webkit-border-radius: 10px 10px 0 0;
-     -moz-border-radius: 10px 10px 0 0;
-      -ms-border-radius: 10px 10px 0 0;
-       -o-border-radius: 10px 10px 0 0;
-          border-radius: 10px 10px 0 0;
+  -webkit-border-radius: 5px 5px 0 0;
+     -moz-border-radius: 5px 5px 0 0;
+      -ms-border-radius: 5px 5px 0 0;
+       -o-border-radius: 5px 5px 0 0;
+          border-radius: 5px 5px 0 0;
 }
 
 .widget .filterwindow {
-    background: orange;
+    font-family: sans-serif;
+    font-size: 10px;
+    line-height: 1.0;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 2px solid #66f;
     padding: 5px 10px 5px;
-  -webkit-border-radius: 0 0 10px 10px;
-     -moz-border-radius: 0 0 10px 10px;
-      -ms-border-radius: 0 0 10px 10px;
-       -o-border-radius: 0 0 10px 10px;
-          border-radius: 0 0 10px 10px;
+  -webkit-border-radius: 0 0 5px 5px;
+     -moz-border-radius: 0 0 5px 5px;
+      -ms-border-radius: 0 0 5px 5px;
+       -o-border-radius: 0 0 5px 5px;
+          border-radius: 0 0 5px 5px;
 }
 
