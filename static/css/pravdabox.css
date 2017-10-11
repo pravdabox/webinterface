@@ -52,6 +52,7 @@ img {
 
 .widget {
     position: absolute;
+    width: 300px;
 }
 
 .widget-dns {
@@ -109,7 +110,7 @@ img {
 
 .widget .filterwindow {
     font-family: sans-serif;
-    font-size: 10px;
+    font-size: 10pt;
     line-height: 1.0;
     color: #fff;
     background-color: rgba(0, 0, 0, 0.6);
