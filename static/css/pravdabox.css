@@ -2,6 +2,9 @@
 /* for the bildaufbau */
 body { visibility: hidden }
 
+/* no scrollbars for the map */
+body { overflow: hidden }
+
 /* fix menu position */
 .open > .dropdown-menu {
     top: 40px;
@@ -36,3 +39,8 @@ img {
     max-height: 360px;
 }
 
+.map {
+    position: absolute;
+    top: 0;
+    left: 0;
+}

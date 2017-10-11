@@ -210,6 +210,43 @@ P.colorize = (block_with_ip) ->
 
     return block_with_ip
 
+P.map =
+    init: ->
+        markers = []
+
+        # size
+        P.map.scale_to_window()
+        $.get 'static/js/world.json', (data) ->
+            $('.map').smallworld
+                geojson: data
+                zoom: 2
+                waterColor: '#021019'
+                landColor: '#08304b'
+
+            setTimeout ->
+                $('.map').html('')
+                lat = $('.map').data('lat')
+                lng = $('.map').data('long')
+                markers.push([lat, lng])
+
+                $('.map').smallworld
+                    geojson: data
+                    zoom: 2
+                    waterColor: '#021019'
+                    landColor: '#08304b'
+                    markers: markers
+                    markerSize: 8
+                    markerColor: '#fe0'
+            , 10
+
+    scale_to_window: ->
+        w = $(window).width()
+        h = $(window).height()
+        $('.map, .map canvas').css
+            width: w
+            height: h
+        console.info w, h
+
 $ ->
     P.dns()
     P.connections()
@@ -219,4 +256,8 @@ $ ->
     P.passwords()
     P.urls()
     P.firmwareupgrade()
+    P.map.init()
+
+    $(window).resize ->
+        P.map.init()
 
