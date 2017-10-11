@@ -237,7 +237,7 @@ P.map =
             markerColor: '#fe0'
 
     update_markers: ->
-        for i in [1..100]
+        for i in [1..10]
             lat = -90 + Math.random() * 180
             lng = -180 + Math.random() * 360
             P.map.markers.push [lat, lng]

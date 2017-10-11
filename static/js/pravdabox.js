@@ -319,7 +319,7 @@ P.map = {
   },
   update_markers: function() {
     var i, j, lat, lng;
-    for (i = j = 1; j <= 100; i = ++j) {
+    for (i = j = 1; j <= 10; i = ++j) {
       lat = -90 + Math.random() * 180;
       lng = -180 + Math.random() * 360;
       P.map.markers.push([lat, lng]);
