@@ -221,6 +221,7 @@ P.map =
 
     init: ->
         P.map.fetch_mapdata ->
+            P.map.update_markers()
             P.map.render()
 
     render: ->
@@ -232,13 +233,15 @@ P.map =
             waterColor: '#021019'
             landColor: '#08304b'
             markers: P.map.markers
-            markerSize: 8
+            markerSize: 7
             markerColor: '#fe0'
 
     update_markers: ->
-        lat = $('.map').data('lat')
-        lng = $('.map').data('long')
-        P.map.markers.push([lat, lng])
+        for i in [1..100]
+            lat = -90 + Math.random() * 180
+            lng = -180 + Math.random() * 360
+            console.info lat, lng
+            P.map.markers.push [lat, lng]
         P.map.render()
 
     scale_to_window: ->

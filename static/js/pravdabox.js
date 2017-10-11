@@ -300,6 +300,7 @@ P.map = {
   },
   init: function() {
     return P.map.fetch_mapdata(function() {
+      P.map.update_markers();
       return P.map.render();
     });
   },
@@ -312,15 +313,18 @@ P.map = {
       waterColor: '#021019',
       landColor: '#08304b',
       markers: P.map.markers,
-      markerSize: 8,
+      markerSize: 7,
       markerColor: '#fe0'
     });
   },
   update_markers: function() {
-    var lat, lng;
-    lat = $('.map').data('lat');
-    lng = $('.map').data('long');
-    P.map.markers.push([lat, lng]);
+    var i, j, lat, lng;
+    for (i = j = 1; j <= 100; i = ++j) {
+      lat = -90 + Math.random() * 180;
+      lng = -180 + Math.random() * 360;
+      console.info(lat, lng);
+      P.map.markers.push([lat, lng]);
+    }
     return P.map.render();
   },
   scale_to_window: function() {
