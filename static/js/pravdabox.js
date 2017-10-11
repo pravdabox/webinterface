@@ -322,7 +322,6 @@ P.map = {
     for (i = j = 1; j <= 100; i = ++j) {
       lat = -90 + Math.random() * 180;
       lng = -180 + Math.random() * 360;
-      console.info(lat, lng);
       P.map.markers.push([lat, lng]);
     }
     return P.map.render();

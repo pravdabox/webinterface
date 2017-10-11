@@ -240,7 +240,6 @@ P.map =
         for i in [1..100]
             lat = -90 + Math.random() * 180
             lng = -180 + Math.random() * 360
-            console.info lat, lng
             P.map.markers.push [lat, lng]
         P.map.render()
 
