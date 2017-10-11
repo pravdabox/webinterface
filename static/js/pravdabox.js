@@ -329,7 +329,7 @@ P.map = {
   scale_to_window: function() {
     return $('.map, .map canvas').css({
       width: $(window).width(),
-      height: $(window).height()
+      height: $(window).height() - 200
     });
   }
 };

@@ -52,8 +52,45 @@ img {
 
 .widget {
     position: absolute;
-    left: 200px;
-    top: 150px;
+}
+
+.widget-dns {
+    left: 20px;
+    top: 40px;
+}
+
+.widget-connections {
+    left: 20px;
+    top: 120px;
+}
+
+.widget-cookies {
+    right: 20px;
+    top: 40px;
+}
+
+.widget-forms {
+    right: 20px;
+    top: 120px;
+}
+
+.widget-passwords {
+    right: 20px;
+    top: 200px;
+}
+
+.widget-urls {
+    left: 0px;
+    bottom: 0px;
+    width: 50%;
+    height: 200px;
+}
+
+.widget-images {
+    right: 0px;
+    bottom: 0px;
+    width: 50%;
+    height: 200px;
 }
 
 .widget .head {

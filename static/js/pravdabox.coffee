@@ -246,7 +246,7 @@ P.map =
     scale_to_window: ->
         $('.map, .map canvas').css
             width: $(window).width()
-            height: $(window).height()
+            height: $(window).height() - 200
 
 $ ->
     P.dns()
