@@ -33,12 +33,20 @@ P.connections = ->
     ws = new WebSocket P.ws_endpoint + '/connections'
 
     ws.onmessage = (event) ->
+        # Plot it on the map
+        ip = event.data.split(' ')[1]
+        P.map.ip2location ip, (data) ->
+            j = $.parseJSON(data)
+            P.map.add_markers [j.lat, j.lng]
+
+        # plot it in connection window
         line = P.colorize event.data
         if P.connections_add line
-            $('.filter-connections .filterwindow').html ''
+            $('.widget-connections .filterwindow').html ''
             c = 0
             for connection in P.connections_bin
-                $('<div class="l l-' + c + '">' + connection + '</div>').appendTo '.filter-connections .filterwindow'
+                $('<div class="l l-' + c + '">' + connection + '</div>').appendTo '.widget-connections .filterwindow'
+                P.map.add_markers [47, 7]
                 c++
             P.scroller 'connections'
 
@@ -210,6 +218,51 @@ P.colorize = (block_with_ip) ->
 
     return block_with_ip
 
+P.map =
+    data: null
+    markers: []
+    markers_index: []
+
+    fetch_mapdata: (done) ->
+        $.get 'static/js/world.json', (data) ->
+            P.map.data = data
+            done()
+
+    init: ->
+        P.map.fetch_mapdata ->
+            P.map.render()
+
+    render: ->
+        P.map.scale_to_window()
+        $('.map').html('')
+        $('.map').smallworld
+            geojson: P.map.data
+            zoom: 2
+            waterColor: '#021019'
+            landColor: '#08304b'
+            markers: P.map.markers
+            markerSize: 7
+            markerColor: '#fe0'
+
+    ip2location: (ip, done) ->
+        $.get 'ip2location?ip=' + ip, (data) ->
+            done(data)
+
+    add_markers: (markers) ->
+        #for i in [1..10]
+        #    lat = -90 + Math.random() * 180
+        #    lng = -180 + Math.random() * 360
+        markers_index = markers.join '-'
+        if markers_index not in P.map.markers_index
+            P.map.markers_index.push markers_index
+            P.map.markers.push [ markers[0], markers[1] ]
+        P.map.render()
+
+    scale_to_window: ->
+        $('.map, .map canvas').css
+            width: $(window).width()
+            height: $(window).height() - 200
+
 $ ->
     P.dns()
     P.connections()
@@ -219,4 +272,8 @@ $ ->
     P.passwords()
     P.urls()
     P.firmwareupgrade()
+    P.map.init()
+
+    $(window).resize ->
+        P.map.render()
 

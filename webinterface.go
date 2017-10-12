@@ -1,11 +1,18 @@
 package main
 
 import (
+	"bytes"
+	"database/sql"
+	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"github.com/fsnotify/fsnotify"
+	_ "github.com/go-sql-driver/mysql"
 	wsd "github.com/joewalnes/websocketd/libwebsocketd"
 	"html/template"
+	"io"
+	"net"
 	"net/http"
 	"os"
 	"os/exec"
@@ -36,6 +43,9 @@ var (
 
 	// make shit shorter
 	p = fmt.Println
+
+	// variable for the database
+	db *sql.DB
 )
 
 // Model of stuff to render a page
@@ -43,14 +53,37 @@ type Model struct {
 	Title string
 }
 
-// Parse all of the bindata templates
+// Location of an IP
+type Location struct {
+	IP          string  `json:"ip"`
+	CountryName string  `json:"country_name"`
+	RegionName  string  `json:"region_name"`
+	CityName    string  `json:"city_name"`
+	Latitude    float32 `json:"lat"`
+	Longitude   float32 `json:"lng"`
+}
+
 func init() {
+	// Parse all of the bindata templates
 	for _, path := range AssetNames() {
 		bytes, err := Asset(path)
 		if err != nil {
 			p("Unable to parse: path=%s, err=%s", path, err)
 		}
 		templates.New(path).Parse(string(bytes))
+	}
+
+	// open mysql connection
+	var err error
+	db, err = sql.Open("mysql", "ip2location:ip2location@/ip2location")
+	if err != nil {
+		p(err.Error())
+	}
+
+	// validate connection
+	err = db.Ping()
+	if err != nil {
+		p(err.Error())
 	}
 }
 
@@ -100,6 +133,24 @@ func webserver() {
 			Title: "Pravdabox",
 		}
 		renderTemplate(rw, "templates/index.html", &model)
+	})
+
+	// ip2location
+	http.HandleFunc("/ip2location", func(rw http.ResponseWriter, req *http.Request) {
+		l := new(Location)
+		ip := req.URL.Query().Get("ip")
+		l.IP = ip
+		numIP, _ := ip2long(net.ParseIP(ip))
+
+		row := db.QueryRow("SELECT country_name, region_name, city_name, latitude, longitude FROM ip2location_db5 WHERE ip_from < ? AND ip_to > ? LIMIT 1", numIP, numIP)
+		err := row.Scan(&l.CountryName, &l.RegionName, &l.CityName, &l.Latitude, &l.Longitude)
+		if err != nil {
+			fmt.Fprintf(rw, "{\"error\": \"%s\"}", err.Error())
+		} else {
+			b := new(bytes.Buffer)
+			json.NewEncoder(b).Encode(l)
+			io.Copy(rw, b)
+		}
 	})
 
 	// about
@@ -178,4 +229,13 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p interface{}) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+// converts an IP to the numerical value of the DB
+func ip2long(ip net.IP) (uint32, error) {
+	ipByte := ip.To4()
+	if ipByte == nil {
+		return 0, errors.New("Not an IPv4 address.")
+	}
+	return uint32(ipByte[0])<<24 | uint32(ipByte[1])<<16 | uint32(ipByte[2])<<8 | uint32(ipByte[3]), nil
 }

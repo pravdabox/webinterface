@@ -15,14 +15,14 @@ P.dns = function() {
   ws = new WebSocket(P.ws_endpoint + '/dns');
   c = 0;
   return ws.onmessage = function(event) {
-    var address, j, len, line, ref;
+    var address, k, len, line, ref;
     line = P.colorize(event.data);
     if (P.dns_add(line)) {
       $('.filter-dns .filterwindow').html('');
       c = 0;
       ref = P.dns_bin;
-      for (j = 0, len = ref.length; j < len; j++) {
-        address = ref[j];
+      for (k = 0, len = ref.length; k < len; k++) {
+        address = ref[k];
         $('<div class="l l-' + c + '">' + address + '</div>').appendTo('.filter-dns .filterwindow');
         c++;
       }
@@ -48,15 +48,22 @@ P.connections = function() {
   var ws;
   ws = new WebSocket(P.ws_endpoint + '/connections');
   return ws.onmessage = function(event) {
-    var c, connection, j, len, line, ref;
+    var c, connection, ip, k, len, line, ref;
+    ip = event.data.split(' ')[1];
+    P.map.ip2location(ip, function(data) {
+      var j;
+      j = $.parseJSON(data);
+      return P.map.add_markers([j.lat, j.lng]);
+    });
     line = P.colorize(event.data);
     if (P.connections_add(line)) {
-      $('.filter-connections .filterwindow').html('');
+      $('.widget-connections .filterwindow').html('');
       c = 0;
       ref = P.connections_bin;
-      for (j = 0, len = ref.length; j < len; j++) {
-        connection = ref[j];
-        $('<div class="l l-' + c + '">' + connection + '</div>').appendTo('.filter-connections .filterwindow');
+      for (k = 0, len = ref.length; k < len; k++) {
+        connection = ref[k];
+        $('<div class="l l-' + c + '">' + connection + '</div>').appendTo('.widget-connections .filterwindow');
+        P.map.add_markers([47, 7]);
         c++;
       }
       return P.scroller('connections');
@@ -81,7 +88,7 @@ P.forms = function() {
   var ws;
   ws = new WebSocket(P.ws_endpoint + '/forms');
   return ws.onmessage = function(event) {
-    var c, form, j, len, line, ref;
+    var c, form, k, len, line, ref;
     line = event.data;
     line = P.parse_formdata(line);
     line = P.colorize(line);
@@ -89,8 +96,8 @@ P.forms = function() {
       $('.filter-forms .filterwindow').html('');
       c = 0;
       ref = P.forms_bin;
-      for (j = 0, len = ref.length; j < len; j++) {
-        form = ref[j];
+      for (k = 0, len = ref.length; k < len; k++) {
+        form = ref[k];
         $('<div class="l l-' + c + '">' + form + '</div>').appendTo('.filter-forms .filterwindow');
         c++;
       }
@@ -113,14 +120,14 @@ P.forms_add = function(form) {
 };
 
 P.parse_formdata = function(data) {
-  var f, form, i, ip, j, key, keys, len, values;
+  var f, form, i, ip, k, key, keys, len, values;
   ip = data.split('\t')[0];
   keys = data.split('\t')[1].split(',');
   values = data.split('\t')[2].split(',');
   f = [];
   i = 0;
-  for (j = 0, len = keys.length; j < len; j++) {
-    key = keys[j];
+  for (k = 0, len = keys.length; k < len; k++) {
+    key = keys[k];
     if (keys[i] !== 'method') {
       f.push(keys[i] + ': ' + '<strong>' + values[i] + '</strong>');
     }
@@ -134,14 +141,14 @@ P.cookies = function() {
   var ws;
   ws = new WebSocket(P.ws_endpoint + '/cookies');
   return ws.onmessage = function(event) {
-    var c, cookie, j, len, line, ref;
+    var c, cookie, k, len, line, ref;
     line = P.colorize(event.data);
     if (P.cookies_add(line)) {
       $('.filter-cookies .filterwindow').html('');
       c = 0;
       ref = P.cookies_bin;
-      for (j = 0, len = ref.length; j < len; j++) {
-        cookie = ref[j];
+      for (k = 0, len = ref.length; k < len; k++) {
+        cookie = ref[k];
         $('<div class="l l-' + c + '">' + cookie + '</div>').appendTo('.filter-cookies .filterwindow');
         c++;
       }
@@ -181,14 +188,14 @@ P.passwords = function() {
   var ws;
   ws = new WebSocket(P.ws_endpoint + '/passwords');
   return ws.onmessage = function(event) {
-    var c, j, len, line, password, ref;
+    var c, k, len, line, password, ref;
     line = P.colorize(event.data);
     if (P.passwords_add(line)) {
       $('.filter-passwords .filterwindow').html('');
       c = 0;
       ref = P.passwords_bin;
-      for (j = 0, len = ref.length; j < len; j++) {
-        password = ref[j];
+      for (k = 0, len = ref.length; k < len; k++) {
+        password = ref[k];
         $('<div class="l l-' + c + '">' + password + '</div>').appendTo('.filter-passwords .filterwindow');
         c++;
       }
@@ -214,14 +221,14 @@ P.urls = function() {
   var ws;
   ws = new WebSocket(P.ws_endpoint + '/urls');
   return ws.onmessage = function(event) {
-    var c, j, len, line, ref, url;
+    var c, k, len, line, ref, url;
     line = P.colorize(event.data);
     if (P.urls_add(line)) {
       $('.filter-urls .filterwindow').html('');
       c = 0;
       ref = P.urls_bin;
-      for (j = 0, len = ref.length; j < len; j++) {
-        url = ref[j];
+      for (k = 0, len = ref.length; k < len; k++) {
+        url = ref[k];
         $('<div class="l l-' + c + '">' + url + '</div>').appendTo('.filter-urls .filterwindow');
         c++;
       }
@@ -289,6 +296,56 @@ P.colorize = function(block_with_ip) {
   return block_with_ip;
 };
 
+P.map = {
+  data: null,
+  markers: [],
+  markers_index: [],
+  fetch_mapdata: function(done) {
+    return $.get('static/js/world.json', function(data) {
+      P.map.data = data;
+      return done();
+    });
+  },
+  init: function() {
+    return P.map.fetch_mapdata(function() {
+      return P.map.render();
+    });
+  },
+  render: function() {
+    P.map.scale_to_window();
+    $('.map').html('');
+    return $('.map').smallworld({
+      geojson: P.map.data,
+      zoom: 2,
+      waterColor: '#021019',
+      landColor: '#08304b',
+      markers: P.map.markers,
+      markerSize: 7,
+      markerColor: '#fe0'
+    });
+  },
+  ip2location: function(ip, done) {
+    return $.get('ip2location?ip=' + ip, function(data) {
+      return done(data);
+    });
+  },
+  add_markers: function(markers) {
+    var markers_index;
+    markers_index = markers.join('-');
+    if (indexOf.call(P.map.markers_index, markers_index) < 0) {
+      P.map.markers_index.push(markers_index);
+      P.map.markers.push([markers[0], markers[1]]);
+    }
+    return P.map.render();
+  },
+  scale_to_window: function() {
+    return $('.map, .map canvas').css({
+      width: $(window).width(),
+      height: $(window).height() - 200
+    });
+  }
+};
+
 $(function() {
   P.dns();
   P.connections();
@@ -297,5 +354,9 @@ $(function() {
   P.images();
   P.passwords();
   P.urls();
-  return P.firmwareupgrade();
+  P.firmwareupgrade();
+  P.map.init();
+  return $(window).resize(function() {
+    return P.map.render();
+  });
 });
