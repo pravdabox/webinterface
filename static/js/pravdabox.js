@@ -51,12 +51,13 @@ P.connections = function() {
     var c, connection, j, len, line, ref;
     line = P.colorize(event.data);
     if (P.connections_add(line)) {
-      $('.filter-connections .filterwindow').html('');
+      $('.widget-connections .filterwindow').html('');
       c = 0;
       ref = P.connections_bin;
       for (j = 0, len = ref.length; j < len; j++) {
         connection = ref[j];
-        $('<div class="l l-' + c + '">' + connection + '</div>').appendTo('.filter-connections .filterwindow');
+        $('<div class="l l-' + c + '">' + connection + '</div>').appendTo('.widget-connections .filterwindow');
+        P.map.add_markers([47, 7]);
         c++;
       }
       return P.scroller('connections');
@@ -292,6 +293,7 @@ P.colorize = function(block_with_ip) {
 P.map = {
   data: null,
   markers: [],
+  markers_index: [],
   fetch_mapdata: function(done) {
     return $.get('static/js/world.json', function(data) {
       P.map.data = data;
@@ -300,7 +302,6 @@ P.map = {
   },
   init: function() {
     return P.map.fetch_mapdata(function() {
-      P.map.update_markers();
       return P.map.render();
     });
   },
@@ -317,12 +318,12 @@ P.map = {
       markerColor: '#fe0'
     });
   },
-  update_markers: function() {
-    var i, j, lat, lng;
-    for (i = j = 1; j <= 10; i = ++j) {
-      lat = -90 + Math.random() * 180;
-      lng = -180 + Math.random() * 360;
-      P.map.markers.push([lat, lng]);
+  add_markers: function(markers) {
+    var markers_index;
+    markers_index = markers.join('-');
+    if (indexOf.call(P.map.markers_index, markers_index) < 0) {
+      P.map.markers_index.push(markers_index);
+      P.map.markers.push([markers[0], markers[1]]);
     }
     return P.map.render();
   },
