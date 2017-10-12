@@ -241,6 +241,7 @@ P.map =
         $('.map').html('')
         $('.map').smallworld
             geojson: P.map.data
+            center: [50, 0]
             zoom: 2
             waterColor: '#021019'
             landColor: '#08304b'
