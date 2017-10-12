@@ -224,7 +224,11 @@ P.map =
     markers_index: []
 
     fetch_mapdata: (done) ->
-        $.get 'static/js/world.json', (data) ->
+        $.ajax 'static/js/world.json',
+            type: 'GET'
+            contentType: 'application/json; charset=UTF-8'
+            dataType: 'json'
+        .done (data) ->
             P.map.data = data
             done()
 

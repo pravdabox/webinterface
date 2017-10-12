@@ -301,7 +301,11 @@ P.map = {
   markers: [],
   markers_index: [],
   fetch_mapdata: function(done) {
-    return $.get('static/js/world.json', function(data) {
+    return $.ajax('static/js/world.json', {
+      type: 'GET',
+      contentType: 'application/json; charset=UTF-8',
+      dataType: 'json'
+    }).done(function(data) {
       P.map.data = data;
       return done();
     });
