@@ -33,6 +33,13 @@ P.connections = ->
     ws = new WebSocket P.ws_endpoint + '/connections'
 
     ws.onmessage = (event) ->
+        # Plot it on the map
+        ip = event.data.split(' ')[1]
+        P.map.ip2location ip, (data) ->
+            j = $.parseJSON(data)
+            P.map.add_markers [j.lat, j.lng]
+
+        # plot it in connection window
         line = P.colorize event.data
         if P.connections_add line
             $('.widget-connections .filterwindow').html ''
@@ -236,6 +243,10 @@ P.map =
             markers: P.map.markers
             markerSize: 7
             markerColor: '#fe0'
+
+    ip2location: (ip, done) ->
+        $.get 'ip2location?ip=' + ip, (data) ->
+            done(data)
 
     add_markers: (markers) ->
         #for i in [1..10]
