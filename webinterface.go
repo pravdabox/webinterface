@@ -102,6 +102,13 @@ func webserver() {
 		renderTemplate(rw, "templates/index.html", &model)
 	})
 
+	// ip2location
+	http.HandleFunc("/ip2location", func(rw http.ResponseWriter, req *http.Request) {
+		ip := req.URL.Query().Get("ip")
+		p(ip)
+		fmt.Fprintf(rw, "lat, long")
+	})
+
 	// about
 	http.HandleFunc("/about", func(rw http.ResponseWriter, req *http.Request) {
 		model := Model{
