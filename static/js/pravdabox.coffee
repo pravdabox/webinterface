@@ -34,7 +34,7 @@ P.connections = ->
 
     ws.onmessage = (event) ->
         # Plot it on the map
-        ip = event.data.split(' ')[1]
+        ip = event.data.split('\t')[1]
         P.map.ip2location ip, (data) ->
             j = $.parseJSON(data)
             P.map.add_markers [j.lat, j.lng]

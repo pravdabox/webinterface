@@ -49,7 +49,7 @@ P.connections = function() {
   ws = new WebSocket(P.ws_endpoint + '/connections');
   return ws.onmessage = function(event) {
     var c, connection, ip, k, len, line, ref;
-    ip = event.data.split(' ')[1];
+    ip = event.data.split('\t')[1];
     P.map.ip2location(ip, function(data) {
       var j;
       j = $.parseJSON(data);
