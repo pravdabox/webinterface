@@ -267,7 +267,7 @@ P.firmwareupgrade = function() {
             }
           });
         } catch (error) {}
-      }, 1000);
+      }, 5000);
     };
     $('#start_firmwareupgrade').remove();
     return false;

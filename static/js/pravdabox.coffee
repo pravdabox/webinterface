@@ -188,7 +188,7 @@ P.firmwareupgrade = ->
                         url: 'http://' + location.host
                         success: ->
                             location.href = 'http://' + location.host
-            , 1000
+            , 5000
 
         $('#start_firmwareupgrade').remove()
         return false
