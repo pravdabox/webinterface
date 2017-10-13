@@ -22,7 +22,7 @@ import (
 
 const (
 	// VERSION holds the version
-	VERSION = "0.11.0"
+	VERSION = "0.60.0"
 
 	// MAXFORKS limits the forks of websockets
 	MAXFORKS = 10
@@ -50,7 +50,8 @@ var (
 
 // Model of stuff to render a page
 type Model struct {
-	Title string
+	Title   string
+	Version string
 }
 
 // Location of an IP
@@ -130,7 +131,8 @@ func webserver() {
 	// index
 	http.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
 		model := Model{
-			Title: "Pravdabox",
+			Title:   "Pravdabox",
+			Version: VERSION,
 		}
 		renderTemplate(rw, "templates/index.html", &model)
 	})
@@ -156,7 +158,8 @@ func webserver() {
 	// about
 	http.HandleFunc("/about", func(rw http.ResponseWriter, req *http.Request) {
 		model := Model{
-			Title: "Pravdabox - About",
+			Title:   "Pravdabox - About",
+			Version: VERSION,
 		}
 		renderTemplate(rw, "templates/about.html", &model)
 	})
@@ -164,7 +167,8 @@ func webserver() {
 	// firmwareupdate
 	http.HandleFunc("/firmwareupdate", func(rw http.ResponseWriter, req *http.Request) {
 		model := Model{
-			Title: "Pravdabox - Firmwareupdate",
+			Title:   "Pravdabox - Firmwareupdate",
+			Version: VERSION,
 		}
 		renderTemplate(rw, "templates/firmwareupdate.html", &model)
 	})
@@ -177,7 +181,8 @@ func webserver() {
 	// upgrade
 	http.HandleFunc("/upgrade", func(rw http.ResponseWriter, req *http.Request) {
 		model := Model{
-			Title: "Pravdabox - Upgrade your privacy",
+			Title:   "Pravdabox - Upgrade your privacy",
+			Version: VERSION,
 		}
 		renderTemplate(rw, "templates/upgrade.html", &model)
 	})
