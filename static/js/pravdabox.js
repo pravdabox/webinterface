@@ -49,14 +49,14 @@ P.connections = function() {
   ws = new WebSocket(P.ws_endpoint + '/connections');
   return ws.onmessage = function(event) {
     var c, connection, ip, k, len, line, ref;
-    ip = event.data.split('\t')[1];
-    P.map.ip2location(ip, function(data) {
-      var j;
-      j = $.parseJSON(data);
-      return P.map.add_markers([j.lat, j.lng]);
-    });
     line = P.colorize(event.data);
     if (P.connections_add(line)) {
+      ip = event.data.split('\t')[1];
+      P.map.ip2location(ip, function(data) {
+        var j;
+        j = $.parseJSON(data);
+        return P.map.add_markers([j.lat, j.lng]);
+      });
       $('.widget-connections .filterwindow').html('');
       c = 0;
       ref = P.connections_bin;
@@ -301,14 +301,18 @@ P.map = {
   markers: [],
   markers_index: [],
   fetch_mapdata: function(done) {
-    return $.ajax('static/js/world.json', {
-      type: 'GET',
-      contentType: 'application/json; charset=UTF-8',
-      dataType: 'json'
-    }).done(function(data) {
-      P.map.data = data;
+    if (!P.map.data) {
+      return $.ajax('static/js/world.json', {
+        type: 'GET',
+        contentType: 'application/json; charset=UTF-8',
+        dataType: 'json'
+      }).done(function(data) {
+        P.map.data = data;
+        return done();
+      });
+    } else {
       return done();
-    });
+    }
   },
   init: function() {
     return P.map.fetch_mapdata(function() {
@@ -362,6 +366,6 @@ $(function() {
   P.firmwareupgrade();
   P.map.init();
   return $(window).resize(function() {
-    return P.map.render();
+    return P.map.init();
   });
 });

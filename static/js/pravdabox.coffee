@@ -33,15 +33,16 @@ P.connections = ->
     ws = new WebSocket P.ws_endpoint + '/connections'
 
     ws.onmessage = (event) ->
-        # Plot it on the map
-        ip = event.data.split('\t')[1]
-        P.map.ip2location ip, (data) ->
-            j = $.parseJSON(data)
-            P.map.add_markers [j.lat, j.lng]
-
-        # plot it in connection window
         line = P.colorize event.data
         if P.connections_add line
+
+            # Plot it on the map
+            ip = event.data.split('\t')[1]
+            P.map.ip2location ip, (data) ->
+                j = $.parseJSON(data)
+                P.map.add_markers [j.lat, j.lng]
+
+            # plot it in connection window
             $('.widget-connections .filterwindow').html ''
             c = 0
             for connection in P.connections_bin
@@ -224,12 +225,15 @@ P.map =
     markers_index: []
 
     fetch_mapdata: (done) ->
-        $.ajax 'static/js/world.json',
-            type: 'GET'
-            contentType: 'application/json; charset=UTF-8'
-            dataType: 'json'
-        .done (data) ->
-            P.map.data = data
+        if not P.map.data
+            $.ajax 'static/js/world.json',
+                type: 'GET'
+                contentType: 'application/json; charset=UTF-8'
+                dataType: 'json'
+            .done (data) ->
+                P.map.data = data
+                done()
+        else
             done()
 
     init: ->
@@ -280,5 +284,5 @@ $ ->
     P.map.init()
 
     $(window).resize ->
-        P.map.render()
+        P.map.init()
 
