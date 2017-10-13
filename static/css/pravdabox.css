@@ -24,24 +24,16 @@ img {
           filter: contrast(100%);
 }
 
-.filter-images img {
-    max-width: 200px;
-    max-height: 200px;
+.widget-images img {
+    width: 200px;
+    height: 200px;
     margin: 10px;
 }
 
 .filterwindow {
     white-space: nowrap;
-    max-height: 120px;
+    height: 126px;
     overflow: auto;
-}
-
-.filter-images .filterwindow {
-    max-height: 360px;
-}
-
-.filter-urls .filterwindow {
-    max-height: 360px;
 }
 
 .map {
@@ -58,11 +50,13 @@ img {
 .widget-dns {
     left: 20px;
     top: 40px;
+    width: 500px;
 }
 
 .widget-connections {
     left: 20px;
-    top: 160px;
+    top: 230px;
+    width: 500px;
 }
 
 .widget-cookies {
@@ -72,26 +66,26 @@ img {
 
 .widget-forms {
     right: 20px;
-    top: 160px;
+    top: 230px;
 }
 
 .widget-passwords {
     right: 20px;
-    top: 280px;
+    top: 420px;
 }
 
 .widget-urls {
     left: 0px;
     bottom: 0px;
     width: 50%;
-    height: 200px;
+    height: 212px;
 }
 
 .widget-images {
     right: 0px;
     bottom: 0px;
     width: 50%;
-    height: 200px;
+    height: 212px;
 }
 
 .widget .head {
@@ -121,5 +115,22 @@ img {
       -ms-border-radius: 0 0 5px 5px;
        -o-border-radius: 0 0 5px 5px;
           border-radius: 0 0 5px 5px;
+}
+
+.widget-urls .head, .widget-urls .filterwindow {
+    border-right: 1px solid #66f;
+}
+
+.widget-images .head, .widget-images .filterwindow{
+    border-left: 1px solid #66f;
+}
+
+.widget-images .filterwindow, .widget-urls .filterwindow {
+    height: 166px;
+  -webkit-border-radius: 0;
+     -moz-border-radius: 0;
+      -ms-border-radius: 0;
+       -o-border-radius: 0;
+          border-radius: 0;
 }
 

@@ -18,12 +18,12 @@ P.dns = function() {
     var address, k, len, line, ref;
     line = P.colorize(event.data);
     if (P.dns_add(line)) {
-      $('.filter-dns .filterwindow').html('');
+      $('.widget-dns .filterwindow').html('');
       c = 0;
       ref = P.dns_bin;
       for (k = 0, len = ref.length; k < len; k++) {
         address = ref[k];
-        $('<div class="l l-' + c + '">' + address + '</div>').appendTo('.filter-dns .filterwindow');
+        $('<div class="l l-' + c + '">' + address + '</div>').appendTo('.widget-dns .filterwindow');
         c++;
       }
       return P.scroller('dns');
@@ -92,12 +92,12 @@ P.forms = function() {
     line = P.parse_formdata(line);
     line = P.colorize(line);
     if (P.forms_add(line)) {
-      $('.filter-forms .filterwindow').html('');
+      $('.widget-forms .filterwindow').html('');
       c = 0;
       ref = P.forms_bin;
       for (k = 0, len = ref.length; k < len; k++) {
         form = ref[k];
-        $('<div class="l l-' + c + '">' + form + '</div>').appendTo('.filter-forms .filterwindow');
+        $('<div class="l l-' + c + '">' + form + '</div>').appendTo('.widget-forms .filterwindow');
         c++;
       }
       return P.scroller('forms');
@@ -143,12 +143,12 @@ P.cookies = function() {
     var c, cookie, k, len, line, ref;
     line = P.colorize(event.data);
     if (P.cookies_add(line)) {
-      $('.filter-cookies .filterwindow').html('');
+      $('.widget-cookies .filterwindow').html('');
       c = 0;
       ref = P.cookies_bin;
       for (k = 0, len = ref.length; k < len; k++) {
         cookie = ref[k];
-        $('<div class="l l-' + c + '">' + cookie + '</div>').appendTo('.filter-cookies .filterwindow');
+        $('<div class="l l-' + c + '">' + cookie + '</div>').appendTo('.widget-cookies .filterwindow');
         c++;
       }
       return P.scroller('cookies');
@@ -174,9 +174,9 @@ P.images = function() {
   ws = new WebSocket(P.ws_endpoint + '/images');
   c = 0;
   return ws.onmessage = function(event) {
-    $('<a href="/image/' + event.data + '" target="_blank"><img class="i i-' + c + '" src="/image/' + event.data + '"></a>').prependTo('.filter-images .filterwindow');
-    if ($('.filter-images .i').length > P.max_lines) {
-      $('.filter-images .i-' + (c - P.max_lines)).remove();
+    $('<a href="/image/' + event.data + '" target="_blank"><img class="i i-' + c + '" src="/image/' + event.data + '"></a>').prependTo('.widget-images .filterwindow');
+    if ($('.widget-images .i').length > P.max_lines) {
+      $('.widget-images .i-' + (c - P.max_lines)).remove();
     }
     P.scroller('images');
     return c++;
@@ -190,12 +190,12 @@ P.passwords = function() {
     var c, k, len, line, password, ref;
     line = P.colorize(event.data);
     if (P.passwords_add(line)) {
-      $('.filter-passwords .filterwindow').html('');
+      $('.widget-passwords .filterwindow').html('');
       c = 0;
       ref = P.passwords_bin;
       for (k = 0, len = ref.length; k < len; k++) {
         password = ref[k];
-        $('<div class="l l-' + c + '">' + password + '</div>').appendTo('.filter-passwords .filterwindow');
+        $('<div class="l l-' + c + '">' + password + '</div>').appendTo('.widget-passwords .filterwindow');
         c++;
       }
       return P.scroller('passwords');
@@ -223,12 +223,12 @@ P.urls = function() {
     var c, k, len, line, ref, url;
     line = P.colorize(event.data);
     if (P.urls_add(line)) {
-      $('.filter-urls .filterwindow').html('');
+      $('.widget-urls .filterwindow').html('');
       c = 0;
       ref = P.urls_bin;
       for (k = 0, len = ref.length; k < len; k++) {
         url = ref[k];
-        $('<div class="l l-' + c + '">' + url + '</div>').appendTo('.filter-urls .filterwindow');
+        $('<div class="l l-' + c + '">' + url + '</div>').appendTo('.widget-urls .filterwindow');
         c++;
       }
       return P.scroller('urls');
@@ -275,7 +275,7 @@ P.firmwareupgrade = function() {
 };
 
 P.scroller = function(filter) {
-  return $('.filter-' + filter + ' .filterwindow').animate({
+  return $('.widget-' + filter + ' .filterwindow').animate({
     scrollTop: 10000
   }, 1);
 };

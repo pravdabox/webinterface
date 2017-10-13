@@ -13,10 +13,10 @@ P.dns = ->
     ws.onmessage = (event) ->
         line = P.colorize event.data
         if P.dns_add line
-            $('.filter-dns .filterwindow').html ''
+            $('.widget-dns .filterwindow').html ''
             c = 0
             for address in P.dns_bin
-                $('<div class="l l-' + c + '">' + address + '</div>').appendTo '.filter-dns .filterwindow'
+                $('<div class="l l-' + c + '">' + address + '</div>').appendTo '.widget-dns .filterwindow'
                 c++
             P.scroller 'dns'
 
@@ -67,10 +67,10 @@ P.forms = ->
         line = P.parse_formdata line
         line = P.colorize line
         if P.forms_add line
-            $('.filter-forms .filterwindow').html ''
+            $('.widget-forms .filterwindow').html ''
             c = 0
             for form in P.forms_bin
-                $('<div class="l l-' + c + '">' + form + '</div>').appendTo '.filter-forms .filterwindow'
+                $('<div class="l l-' + c + '">' + form + '</div>').appendTo '.widget-forms .filterwindow'
                 c++
             P.scroller 'forms'
 
@@ -102,10 +102,10 @@ P.cookies = ->
     ws.onmessage = (event) ->
         line = P.colorize event.data
         if P.cookies_add line
-            $('.filter-cookies .filterwindow').html ''
+            $('.widget-cookies .filterwindow').html ''
             c = 0
             for cookie in P.cookies_bin
-                $('<div class="l l-' + c + '">' + cookie + '</div>').appendTo '.filter-cookies .filterwindow'
+                $('<div class="l l-' + c + '">' + cookie + '</div>').appendTo '.widget-cookies .filterwindow'
                 c++
             P.scroller 'cookies'
 
@@ -123,9 +123,9 @@ P.images = ->
 
     c = 0
     ws.onmessage = (event) ->
-        $('<a href="/image/' + event.data + '" target="_blank"><img class="i i-' + c + '" src="/image/' + event.data + '"></a>').prependTo '.filter-images .filterwindow'
-        if $('.filter-images .i').length > P.max_lines
-            $('.filter-images .i-' + (c - P.max_lines)).remove()
+        $('<a href="/image/' + event.data + '" target="_blank"><img class="i i-' + c + '" src="/image/' + event.data + '"></a>').prependTo '.widget-images .filterwindow'
+        if $('.widget-images .i').length > P.max_lines
+            $('.widget-images .i-' + (c - P.max_lines)).remove()
         P.scroller 'images'
         c++
 
@@ -135,10 +135,10 @@ P.passwords = ->
     ws.onmessage = (event) ->
         line = P.colorize event.data
         if P.passwords_add line
-            $('.filter-passwords .filterwindow').html ''
+            $('.widget-passwords .filterwindow').html ''
             c = 0
             for password in P.passwords_bin
-                $('<div class="l l-' + c + '">' + password + '</div>').appendTo '.filter-passwords .filterwindow'
+                $('<div class="l l-' + c + '">' + password + '</div>').appendTo '.widget-passwords .filterwindow'
                 c++
             P.scroller 'passwords'
 
@@ -157,10 +157,10 @@ P.urls = ->
     ws.onmessage = (event) ->
         line = P.colorize event.data
         if P.urls_add line
-            $('.filter-urls .filterwindow').html ''
+            $('.widget-urls .filterwindow').html ''
             c = 0
             for url in P.urls_bin
-                $('<div class="l l-' + c + '">' + url + '</div>').appendTo '.filter-urls .filterwindow'
+                $('<div class="l l-' + c + '">' + url + '</div>').appendTo '.widget-urls .filterwindow'
                 c++
             P.scroller 'urls'
 
@@ -194,7 +194,7 @@ P.firmwareupgrade = ->
         return false
 
 P.scroller = (filter) ->
-    $('.filter-' + filter + ' .filterwindow').animate
+    $('.widget-' + filter + ' .filterwindow').animate
         scrollTop: 10000
     , 1
 
