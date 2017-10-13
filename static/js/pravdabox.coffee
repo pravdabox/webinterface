@@ -40,7 +40,6 @@ P.connections = ->
             ip = event.data.split('\t')[1]
             P.map.ip2location ip, (data) ->
                 j = $.parseJSON(data)
-                P.map.add_markers [j.lat, j.lng]
 
             # plot it in connection window
             $('.widget-connections .filterwindow').html ''
@@ -222,7 +221,7 @@ P.colorize = (block_with_ip) ->
 P.map =
     data: null
     markers: []
-    markers_index: []
+    ip_coords: {}
 
     fetch_mapdata: (done) ->
         if not P.map.data
@@ -254,17 +253,17 @@ P.map =
             markerColor: '#fe0'
 
     ip2location: (ip, done) ->
-        $.get 'ip2location?ip=' + ip, (data) ->
-            done(data)
+        if not P.map.ip_coords[ip]
+            $.get 'ip2location?ip=' + ip, (data) ->
+                P.map.ip_coords[ip] = data
+                j = $.parseJSON(data)
+                P.map.add_markers [j.lat, j.lng]
+                done(data)
+        else
+            done(P.map.ip_coords[ip])
 
     add_markers: (markers) ->
-        #for i in [1..10]
-        #    lat = -90 + Math.random() * 180
-        #    lng = -180 + Math.random() * 360
-        markers_index = markers.join '-'
-        if markers_index not in P.map.markers_index
-            P.map.markers_index.push markers_index
-            P.map.markers.push [ markers[0], markers[1] ]
+        P.map.markers.push [ markers[0], markers[1] ]
         P.map.render()
 
     scale_to_window: ->

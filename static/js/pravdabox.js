@@ -54,8 +54,7 @@ P.connections = function() {
       ip = event.data.split('\t')[1];
       P.map.ip2location(ip, function(data) {
         var j;
-        j = $.parseJSON(data);
-        return P.map.add_markers([j.lat, j.lng]);
+        return j = $.parseJSON(data);
       });
       $('.widget-connections .filterwindow').html('');
       c = 0;
@@ -299,7 +298,7 @@ P.colorize = function(block_with_ip) {
 P.map = {
   data: null,
   markers: [],
-  markers_index: [],
+  ip_coords: {},
   fetch_mapdata: function(done) {
     if (!P.map.data) {
       return $.ajax('static/js/world.json', {
@@ -334,17 +333,20 @@ P.map = {
     });
   },
   ip2location: function(ip, done) {
-    return $.get('ip2location?ip=' + ip, function(data) {
-      return done(data);
-    });
+    if (!P.map.ip_coords[ip]) {
+      return $.get('ip2location?ip=' + ip, function(data) {
+        var j;
+        P.map.ip_coords[ip] = data;
+        j = $.parseJSON(data);
+        P.map.add_markers([j.lat, j.lng]);
+        return done(data);
+      });
+    } else {
+      return done(P.map.ip_coords[ip]);
+    }
   },
   add_markers: function(markers) {
-    var markers_index;
-    markers_index = markers.join('-');
-    if (indexOf.call(P.map.markers_index, markers_index) < 0) {
-      P.map.markers_index.push(markers_index);
-      P.map.markers.push([markers[0], markers[1]]);
-    }
+    P.map.markers.push([markers[0], markers[1]]);
     return P.map.render();
   },
   scale_to_window: function() {
