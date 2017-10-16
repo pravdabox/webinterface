@@ -38,15 +38,14 @@ P.connections = ->
 
             # Plot it on the map
             ip = event.data.split('\t')[1]
-            P.map.ip2location ip, (data) ->
-                j = $.parseJSON(data)
+            P.map.ip2location ip, ->
+                P.map.render()
 
             # plot it in connection window
             $('.widget-connections .filterwindow').html ''
             c = 0
             for connection in P.connections_bin
                 $('<div class="l l-' + c + '">' + connection + '</div>').appendTo '.widget-connections .filterwindow'
-                P.map.add_markers [47, 7]
                 c++
             P.scroller 'connections'
 
@@ -262,14 +261,16 @@ P.map =
                 maxLevel: 10
 
     init: ->
-        P.map.render()
+        homeip = $('.map').data('homeip')
+        P.map.ip2location homeip, ->
+            P.map.render()
 
     render: ->
         P.map.scale_to_window()
 
         options = P.map.options
         options.plots =
-            paris:
+            home:
                 latitude: 48.86
                 longitude: 2.3444
                 text:
@@ -279,10 +280,17 @@ P.map =
                 longitude: -73.833
                 text:
                     content: 'New York'
-        options.links =
-            'parisnewyork':
-                between:
-                    ['paris', 'newyork']
+#        options.links =
+#            'parisnewyork':
+#                between:
+#                    ['paris', 'newyork']
+
+        for m in P.map.markers
+            options.plots[m.ip] =
+                latitude: m.lat
+                longitude: m.lng
+                text:
+                    content: "#{m.ip} (#{m.city_name})"
 
         $('.mapcontainer').mapael options
 
@@ -291,14 +299,10 @@ P.map =
             $.get 'ip2location?ip=' + ip, (data) ->
                 P.map.ip_coords[ip] = data
                 j = $.parseJSON(data)
-                P.map.add_markers [j.lat, j.lng]
+                P.map.markers.push j
                 done(data)
         else
             done(P.map.ip_coords[ip])
-
-    add_markers: (markers) ->
-        P.map.markers.push [ markers[0], markers[1] ]
-        P.map.render()
 
     scale_to_window: ->
         $('.mapcontainer, .mapcontainer .map').css

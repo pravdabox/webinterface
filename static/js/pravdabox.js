@@ -52,9 +52,8 @@ P.connections = function() {
     line = P.colorize(event.data);
     if (P.connections_add(line)) {
       ip = event.data.split('\t')[1];
-      P.map.ip2location(ip, function(data) {
-        var j;
-        return j = $.parseJSON(data);
+      P.map.ip2location(ip, function() {
+        return P.map.render();
       });
       $('.widget-connections .filterwindow').html('');
       c = 0;
@@ -62,7 +61,6 @@ P.connections = function() {
       for (k = 0, len = ref.length; k < len; k++) {
         connection = ref[k];
         $('<div class="l l-' + c + '">' + connection + '</div>').appendTo('.widget-connections .filterwindow');
-        P.map.add_markers([47, 7]);
         c++;
       }
       return P.scroller('connections');
@@ -351,14 +349,18 @@ P.map = {
     }
   },
   init: function() {
-    return P.map.render();
+    var homeip;
+    homeip = $('.map').data('homeip');
+    return P.map.ip2location(homeip, function() {
+      return P.map.render();
+    });
   },
   render: function() {
-    var options;
+    var k, len, m, options, ref;
     P.map.scale_to_window();
     options = P.map.options;
     options.plots = {
-      paris: {
+      home: {
         latitude: 48.86,
         longitude: 2.3444,
         text: {
@@ -373,11 +375,17 @@ P.map = {
         }
       }
     };
-    options.links = {
-      'parisnewyork': {
-        between: ['paris', 'newyork']
-      }
-    };
+    ref = P.map.markers;
+    for (k = 0, len = ref.length; k < len; k++) {
+      m = ref[k];
+      options.plots[m.ip] = {
+        latitude: m.lat,
+        longitude: m.lng,
+        text: {
+          content: m.ip + " (" + m.city_name + ")"
+        }
+      };
+    }
     return $('.mapcontainer').mapael(options);
   },
   ip2location: function(ip, done) {
@@ -386,16 +394,12 @@ P.map = {
         var j;
         P.map.ip_coords[ip] = data;
         j = $.parseJSON(data);
-        P.map.add_markers([j.lat, j.lng]);
+        P.map.markers.push(j);
         return done(data);
       });
     } else {
       return done(P.map.ip_coords[ip]);
     }
-  },
-  add_markers: function(markers) {
-    P.map.markers.push([markers[0], markers[1]]);
-    return P.map.render();
   },
   scale_to_window: function() {
     return $('.mapcontainer, .mapcontainer .map').css({
