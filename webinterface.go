@@ -12,6 +12,7 @@ import (
 	wsd "github.com/joewalnes/websocketd/libwebsocketd"
 	"html/template"
 	"io"
+	"io/ioutil"
 	"net"
 	"net/http"
 	"os"
@@ -46,12 +47,16 @@ var (
 
 	// variable for the database
 	db *sql.DB
+
+	// my own IP
+	myIP string
 )
 
 // Model of stuff to render a page
 type Model struct {
 	Title   string
 	Version string
+	MyIP    string
 }
 
 // Location of an IP
@@ -86,6 +91,15 @@ func init() {
 	if err != nil {
 		p(err.Error())
 	}
+
+	// get current public IP
+	resp, err := http.Get("https://wtfismyip.com/text")
+	if err != nil {
+		p(err.Error())
+	}
+	defer resp.Body.Close()
+	r, _ := ioutil.ReadAll(resp.Body)
+	myIP = s.TrimSpace(string(r))
 }
 
 func main() {
@@ -133,6 +147,7 @@ func webserver() {
 		model := Model{
 			Title:   "Pravdabox",
 			Version: VERSION,
+			MyIP:    myIP,
 		}
 		renderTemplate(rw, "templates/index.html", &model)
 	})
@@ -193,13 +208,13 @@ func webserver() {
 func imagesWatcher() {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
-		p(err)
+		p(err.Error())
 	}
 	defer watcher.Close()
 
 	outfile, err := os.OpenFile("/tmp/filter-images.out", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
-		p(err)
+		p(err.Error())
 	}
 	defer outfile.Close()
 
@@ -210,18 +225,18 @@ func imagesWatcher() {
 				if event.Op&fsnotify.Create == fsnotify.Create {
 					filename := s.Replace(event.Name, "/tmp/driftnet/", "", 1)
 					if _, err = outfile.WriteString(filename + "\n"); err != nil {
-						p("error:", err)
+						p("error:", err.Error())
 					}
 				}
 			case err := <-watcher.Errors:
-				p("error:", err)
+				p("error:", err.Error())
 			}
 		}
 	}()
 
 	err = watcher.Add("/tmp/driftnet")
 	if err != nil {
-		p(err)
+		p(err.Error())
 	}
 
 	done := make(chan bool)
