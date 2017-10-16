@@ -298,84 +298,87 @@ P.colorize = function(block_with_ip) {
 P.map = {
   markers: [],
   ip_coords: {},
+  options: {
+    map: {
+      name: 'world_countries_miller',
+      defaultArea: {
+        attrs: {
+          fill: '#08304b',
+          stroke: '#08304b',
+          'stroke-width': 0.3
+        },
+        attrsHover: {
+          animDuration: 0,
+          fill: '#08304b'
+        }
+      },
+      defaultPlot: {
+        attrs: {
+          fill: '#ff0',
+          stroke: '#000',
+          r: 1
+        },
+        attrsHover: {
+          'stroke-width': 0,
+          r: 1
+        },
+        text: {
+          attrs: {
+            fill: '#fff',
+            'font-size': 5
+          },
+          margin: 1
+        }
+      },
+      defaultLink: {
+        attrs: {
+          stroke: '#0f0',
+          'stroke-width': 0.3
+        },
+        factor: -0.1
+      },
+      zoom: {
+        enabled: true,
+        init: {
+          latitude: 50,
+          longitude: 0,
+          level: 0
+        },
+        animDuration: 0,
+        step: 1,
+        maxLevel: 10
+      }
+    }
+  },
   init: function() {
     return P.map.render();
   },
   render: function() {
+    var o;
     P.map.scale_to_window();
-    return $('.mapcontainer').mapael({
-      map: {
-        name: 'world_countries_miller',
-        defaultArea: {
-          attrs: {
-            fill: '#08304b',
-            stroke: '#08304b',
-            'stroke-width': 0.3
-          },
-          attrsHover: {
-            animDuration: 0,
-            fill: '#08304b'
-          }
-        },
-        defaultPlot: {
-          attrs: {
-            fill: '#ff0',
-            stroke: '#000',
-            r: 1
-          },
-          attrsHover: {
-            'stroke-width': 0,
-            r: 1
-          },
-          text: {
-            attrs: {
-              fill: '#fff',
-              'font-size': 5
-            },
-            margin: 1
-          }
-        },
-        defaultLink: {
-          attrs: {
-            stroke: '#0f0',
-            'stroke-width': 0.3
-          },
-          factor: -0.1
-        },
-        zoom: {
-          enabled: true,
-          init: {
-            latitude: 50,
-            longitude: 0,
-            level: 0
-          },
-          animDuration: 0,
-          step: 1,
-          maxLevel: 10
+    o = P.map.options;
+    o.plots = {
+      paris: {
+        latitude: 48.86,
+        longitude: 2.3444,
+        text: {
+          content: 'Paris'
         }
       },
-      plots: {
-        paris: {
-          latitude: 48.86,
-          longitude: 2.3444,
-          text: {
-            content: 'Paris'
-          }
-        },
-        newyork: {
-          latitude: 40.667,
-          longitude: -73.833,
-          text: {
-            content: 'New York'
-          }
-        }
-      },
-      links: {
-        'parisnewyork': {
-          between: ['paris', 'newyork']
+      newyork: {
+        latitude: 40.667,
+        longitude: -73.833,
+        text: {
+          content: 'New York'
         }
       }
-    });
+    };
+    o.links = {
+      'parisnewyork': {
+        between: ['paris', 'newyork']
+      }
+    };
+    return $('.mapcontainer').mapael(o);
   },
   ip2location: function(ip, done) {
     if (!P.map.ip_coords[ip]) {
