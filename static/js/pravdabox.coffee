@@ -267,8 +267,8 @@ P.map =
     render: ->
         P.map.scale_to_window()
 
-        o = P.map.options
-        o.plots =
+        options = P.map.options
+        options.plots =
             paris:
                 latitude: 48.86
                 longitude: 2.3444
@@ -279,12 +279,12 @@ P.map =
                 longitude: -73.833
                 text:
                     content: 'New York'
-        o.links =
+        options.links =
             'parisnewyork':
                 between:
                     ['paris', 'newyork']
 
-        $('.mapcontainer').mapael o
+        $('.mapcontainer').mapael options
 
     ip2location: (ip, done) ->
         if not P.map.ip_coords[ip]

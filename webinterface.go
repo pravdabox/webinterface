@@ -126,7 +126,6 @@ func webserver() {
 	logScope := wsd.RootLogScope(wsd.LogAccess, func(l *wsd.LogScope,
 		level wsd.LogLevel, levelName string,
 		category string, msg string, args ...interface{}) {
-		p(args...)
 	})
 	config := &wsd.Config{
 		ScriptDir:      "/opt/pravdabox/filters",

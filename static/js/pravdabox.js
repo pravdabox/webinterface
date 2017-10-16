@@ -354,10 +354,10 @@ P.map = {
     return P.map.render();
   },
   render: function() {
-    var o;
+    var options;
     P.map.scale_to_window();
-    o = P.map.options;
-    o.plots = {
+    options = P.map.options;
+    options.plots = {
       paris: {
         latitude: 48.86,
         longitude: 2.3444,
@@ -373,12 +373,12 @@ P.map = {
         }
       }
     };
-    o.links = {
+    options.links = {
       'parisnewyork': {
         between: ['paris', 'newyork']
       }
     };
-    return $('.mapcontainer').mapael(o);
+    return $('.mapcontainer').mapael(options);
   },
   ip2location: function(ip, done) {
     if (!P.map.ip_coords[ip]) {
