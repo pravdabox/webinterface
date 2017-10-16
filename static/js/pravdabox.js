@@ -375,6 +375,7 @@ P.map = {
         between: [P.map.homeip, m.ip]
       };
     }
+    $('.mapcontainer .map').html('');
     return $('.mapcontainer').mapael(options);
   },
   ip2location: function(ip, done) {

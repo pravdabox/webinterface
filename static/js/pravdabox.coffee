@@ -302,6 +302,7 @@ P.map =
                 between:
                     [P.map.homeip, m.ip]
 
+        $('.mapcontainer .map').html ''
         $('.mapcontainer').mapael options
 
     ip2location: (ip, done) ->
