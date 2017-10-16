@@ -219,38 +219,68 @@ P.colorize = (block_with_ip) ->
     return block_with_ip
 
 P.map =
-    data: null
     markers: []
     ip_coords: {}
 
-    fetch_mapdata: (done) ->
-        if not P.map.data
-            $.ajax 'static/js/world.json',
-                type: 'GET'
-                contentType: 'application/json; charset=UTF-8'
-                dataType: 'json'
-            .done (data) ->
-                P.map.data = data
-                done()
-        else
-            done()
-
     init: ->
-        P.map.fetch_mapdata ->
-            P.map.render()
+        P.map.render()
 
     render: ->
         P.map.scale_to_window()
-        $('.map').html('')
-        $('.map').smallworld
-            geojson: P.map.data
-            center: [50, 0]
-            zoom: 2
-            waterColor: '#021019'
-            landColor: '#08304b'
-            markers: P.map.markers
-            markerSize: 7
-            markerColor: '#fe0'
+        $('.mapcontainer').mapael
+            map:
+                name: 'world_countries_miller'
+                defaultArea:
+                    attrs:
+                        fill: '#08304b'
+                        stroke: '#08304b'
+                        'stroke-width': 0.3
+                    attrsHover:
+                        animDuration: 0
+                        fill: '#08304b'
+                defaultPlot:
+                    attrs:
+                        fill: '#ff0'
+                        stroke: '#000'
+                        r: 1
+                    attrsHover:
+                        'stroke-width': 0
+                        r: 1
+                    text:
+                        attrs:
+                            fill: '#fff'
+                            'font-size': 5
+                        margin: 1
+                defaultLink:
+                    attrs:
+                        stroke: '#0f0'
+                        'stroke-width': 0.3
+                    factor: -0.1
+                zoom:
+                    enabled: true
+                    init:
+                        latitude: 50
+                        longitude: 0
+                        level: 0
+                    animDuration: 0
+                    step: 1
+                    maxLevel: 10
+            plots:
+                paris:
+                    latitude: 48.86
+                    longitude: 2.3444
+                    text:
+                        content: 'Paris'
+                newyork:
+                    latitude: 40.667
+                    longitude: -73.833
+                    text:
+                        content: 'New York'
+            links:
+                'parisnewyork':
+                    between:
+                        ['paris', 'newyork']
+
 
     ip2location: (ip, done) ->
         if not P.map.ip_coords[ip]
@@ -267,7 +297,7 @@ P.map =
         P.map.render()
 
     scale_to_window: ->
-        $('.map, .map canvas').css
+        $('.mapcontainer, .mapcontainer .map').css
             width: $(window).width()
             height: $(window).height() - 200
 

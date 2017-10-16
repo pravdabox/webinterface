@@ -38,7 +38,7 @@ img {
 
 .map {
     position: absolute;
-    top: 0;
+    top: 20px;
     left: 0;
 }
 

@@ -296,40 +296,85 @@ P.colorize = function(block_with_ip) {
 };
 
 P.map = {
-  data: null,
   markers: [],
   ip_coords: {},
-  fetch_mapdata: function(done) {
-    if (!P.map.data) {
-      return $.ajax('static/js/world.json', {
-        type: 'GET',
-        contentType: 'application/json; charset=UTF-8',
-        dataType: 'json'
-      }).done(function(data) {
-        P.map.data = data;
-        return done();
-      });
-    } else {
-      return done();
-    }
-  },
   init: function() {
-    return P.map.fetch_mapdata(function() {
-      return P.map.render();
-    });
+    return P.map.render();
   },
   render: function() {
     P.map.scale_to_window();
-    $('.map').html('');
-    return $('.map').smallworld({
-      geojson: P.map.data,
-      center: [50, 0],
-      zoom: 2,
-      waterColor: '#021019',
-      landColor: '#08304b',
-      markers: P.map.markers,
-      markerSize: 7,
-      markerColor: '#fe0'
+    return $('.mapcontainer').mapael({
+      map: {
+        name: 'world_countries_miller',
+        defaultArea: {
+          attrs: {
+            fill: '#08304b',
+            stroke: '#08304b',
+            'stroke-width': 0.3
+          },
+          attrsHover: {
+            animDuration: 0,
+            fill: '#08304b'
+          }
+        },
+        defaultPlot: {
+          attrs: {
+            fill: '#ff0',
+            stroke: '#000',
+            r: 1
+          },
+          attrsHover: {
+            'stroke-width': 0,
+            r: 1
+          },
+          text: {
+            attrs: {
+              fill: '#fff',
+              'font-size': 5
+            },
+            margin: 1
+          }
+        },
+        defaultLink: {
+          attrs: {
+            stroke: '#0f0',
+            'stroke-width': 0.3
+          },
+          factor: -0.1
+        },
+        zoom: {
+          enabled: true,
+          init: {
+            latitude: 50,
+            longitude: 0,
+            level: 0
+          },
+          animDuration: 0,
+          step: 1,
+          maxLevel: 10
+        }
+      },
+      plots: {
+        paris: {
+          latitude: 48.86,
+          longitude: 2.3444,
+          text: {
+            content: 'Paris'
+          }
+        },
+        newyork: {
+          latitude: 40.667,
+          longitude: -73.833,
+          text: {
+            content: 'New York'
+          }
+        }
+      },
+      links: {
+        'parisnewyork': {
+          between: ['paris', 'newyork']
+        }
+      }
     });
   },
   ip2location: function(ip, done) {
@@ -350,7 +395,7 @@ P.map = {
     return P.map.render();
   },
   scale_to_window: function() {
-    return $('.map, .map canvas').css({
+    return $('.mapcontainer, .mapcontainer .map').css({
       width: $(window).width(),
       height: $(window).height() - 200
     });
