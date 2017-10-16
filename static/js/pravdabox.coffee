@@ -220,6 +220,7 @@ P.colorize = (block_with_ip) ->
 P.map =
     markers: []
     ip_coords: {}
+    homeip: null
 
     options:
         map:
@@ -261,36 +262,45 @@ P.map =
                 maxLevel: 10
 
     init: ->
-        homeip = $('.map').data('homeip')
-        P.map.ip2location homeip, ->
+        P.map.homeip = $('.map').data('homeip')
+        P.map.ip2location P.map.homeip, ->
             P.map.render()
 
     render: ->
         P.map.scale_to_window()
 
         options = P.map.options
-        options.plots =
-            home:
-                latitude: 48.86
-                longitude: 2.3444
-                text:
-                    content: 'Paris'
-            newyork:
-                latitude: 40.667
-                longitude: -73.833
-                text:
-                    content: 'New York'
+        options.plots = {}
+        options.links = {}
+
+#        options.plots =
+#            home:
+#                latitude: 48.86
+#                longitude: 2.3444
+#                text:
+#                    content: 'Paris'
+#            newyork:
+#                latitude: 40.667
+#                longitude: -73.833
+#                text:
+#                    content: 'New York'
 #        options.links =
 #            'parisnewyork':
 #                between:
 #                    ['paris', 'newyork']
 
         for m in P.map.markers
+
+            # plot
             options.plots[m.ip] =
                 latitude: m.lat
                 longitude: m.lng
                 text:
                     content: "#{m.ip} (#{m.city_name})"
+            # link
+            options.links[ "{#{P.map.homeip}-#{m.ip}" ] =
+                between:
+                    [P.map.homeip, m.ip]
 
         $('.mapcontainer').mapael options
 

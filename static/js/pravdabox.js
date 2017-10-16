@@ -296,6 +296,7 @@ P.colorize = function(block_with_ip) {
 P.map = {
   markers: [],
   ip_coords: {},
+  homeip: null,
   options: {
     map: {
       name: 'world_countries_miller',
@@ -349,9 +350,8 @@ P.map = {
     }
   },
   init: function() {
-    var homeip;
-    homeip = $('.map').data('homeip');
-    return P.map.ip2location(homeip, function() {
+    P.map.homeip = $('.map').data('homeip');
+    return P.map.ip2location(P.map.homeip, function() {
       return P.map.render();
     });
   },
@@ -359,22 +359,8 @@ P.map = {
     var k, len, m, options, ref;
     P.map.scale_to_window();
     options = P.map.options;
-    options.plots = {
-      home: {
-        latitude: 48.86,
-        longitude: 2.3444,
-        text: {
-          content: 'Paris'
-        }
-      },
-      newyork: {
-        latitude: 40.667,
-        longitude: -73.833,
-        text: {
-          content: 'New York'
-        }
-      }
-    };
+    options.plots = {};
+    options.links = {};
     ref = P.map.markers;
     for (k = 0, len = ref.length; k < len; k++) {
       m = ref[k];
@@ -384,6 +370,9 @@ P.map = {
         text: {
           content: m.ip + " (" + m.city_name + ")"
         }
+      };
+      options.links["{" + P.map.homeip + "-" + m.ip] = {
+        between: [P.map.homeip, m.ip]
       };
     }
     return $('.mapcontainer').mapael(options);
