@@ -23,7 +23,7 @@ import (
 
 const (
 	// VERSION holds the version
-	VERSION = "0.70.0"
+	VERSION = "0.70.1"
 
 	// MAXFORKS limits the forks of websockets
 	MAXFORKS = 10
@@ -93,7 +93,7 @@ func init() {
 	}
 
 	// get current public IP
-	resp, err := http.Get("https://wtfismyip.com/text")
+	resp, err := http.Get("http://wtfismyip.com/text")
 	if err != nil {
 		p(err.Error())
 	}
