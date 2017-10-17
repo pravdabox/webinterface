@@ -17,6 +17,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"sort"
 	s "strings"
 	"time"
 )
@@ -27,6 +28,9 @@ const (
 
 	// MAXFORKS limits the forks of websockets
 	MAXFORKS = 10
+
+	// MAXFILES limits the amount of images in driftnet dir
+	MAXFILES = 100
 )
 
 var (
@@ -76,6 +80,13 @@ type Location struct {
 	Latitude    float32 `json:"lat"`
 	Longitude   float32 `json:"lng"`
 }
+
+// make FileInfo sortable
+type byMtime []os.FileInfo
+
+func (fi byMtime) Len() int           { return len(fi) }
+func (fi byMtime) Swap(i, j int)      { fi[i], fi[j] = fi[j], fi[i] }
+func (fi byMtime) Less(i, j int) bool { return fi[i].ModTime().Before(fi[j].ModTime()) }
 
 func init() {
 	// Parse all of the bindata templates
@@ -257,6 +268,24 @@ func imagesWatcher() {
 					if _, err = outfile.WriteString(filename + "\n"); err != nil {
 						p("error:", err.Error())
 					}
+
+					// prune old files, only keep 100
+					files, err := ioutil.ReadDir("/tmp/driftnet")
+					if err != nil {
+						p(err.Error())
+					}
+
+					sort.Sort(byMtime(files))
+
+					if len(files) > MAXFILES {
+						deleteLimit := len(files) - MAXFILES
+						for i, f := range files {
+							if i < deleteLimit {
+								os.Remove("/tmp/driftnet/" + f.Name())
+							}
+						}
+					}
+
 				}
 			case err := <-watcher.Errors:
 				p("error:", err.Error())
