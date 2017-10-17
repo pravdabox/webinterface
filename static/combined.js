@@ -412,7 +412,9 @@ P.map = {
         var j;
         P.map.ip_coords[ip] = data;
         j = $.parseJSON(data);
-        P.map.markers.push(j);
+        if (j.lat !== 0 && j.lng !== 0) {
+          P.map.markers.push(j);
+        }
         return done(data);
       });
     } else {

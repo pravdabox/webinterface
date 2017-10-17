@@ -299,7 +299,8 @@ P.map =
             $.get 'ip2location?ip=' + ip, (data) ->
                 P.map.ip_coords[ip] = data
                 j = $.parseJSON(data)
-                P.map.markers.push j
+                if j.lat != 0 and j.lng != 0
+                    P.map.markers.push j
                 done(data)
         else
             done(P.map.ip_coords[ip])
