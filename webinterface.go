@@ -23,7 +23,7 @@ import (
 
 const (
 	// VERSION holds the version
-	VERSION = "0.71.0"
+	VERSION = "0.72.0"
 
 	// MAXFORKS limits the forks of websockets
 	MAXFORKS = 10
@@ -51,13 +51,17 @@ var (
 
 	// my own IP
 	myIP string
+
+	// available version
+	availableVersion string
 )
 
 // Model of stuff to render a page
 type Model struct {
-	Title   string
-	Version string
-	MyIP    string
+	Title            string
+	Version          string
+	AvailableVersion string
+	MyIP             string
 }
 
 // Location of an IP
@@ -101,6 +105,9 @@ func init() {
 	defer resp.Body.Close()
 	r, _ := ioutil.ReadAll(resp.Body)
 	myIP = s.TrimSpace(string(r))
+
+	// get available version
+	availableVersion = getAvailableVersion()
 }
 
 func main() {
@@ -186,8 +193,9 @@ func webserver() {
 	// firmwareupdate
 	http.HandleFunc("/firmwareupdate", func(rw http.ResponseWriter, req *http.Request) {
 		model := Model{
-			Title:   "Pravdabox - Firmwareupdate",
-			Version: VERSION,
+			Title:            "Pravdabox - Firmwareupdate",
+			Version:          VERSION,
+			AvailableVersion: availableVersion,
 		}
 		renderTemplate(rw, "templates/firmwareupdate.html", &model)
 	})
@@ -262,4 +270,24 @@ func ip2long(ip net.IP) (uint32, error) {
 		return 0, errors.New("Not an IPv4 address.")
 	}
 	return uint32(ipByte[0])<<24 | uint32(ipByte[1])<<16 | uint32(ipByte[2])<<8 | uint32(ipByte[3]), nil
+}
+
+func getAvailableVersion() string {
+	resp, err := http.Get("http://91.219.238.219/pravda/x86_64/packages/Packages")
+	if err != nil {
+		p(err.Error())
+		return "-"
+	}
+	defer resp.Body.Close()
+	r, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		p(err.Error())
+		return "-"
+	}
+	pkgInfo := s.TrimSpace(string(r))
+	afterWebinterface := s.Split(pkgInfo, "Package: webinterface")[1]
+	versionLine := s.Split(afterWebinterface, "Depends:")[0]
+	vNum := s.Split(versionLine, "Version:")[1]
+	vNumTrimmed := s.TrimSpace(vNum)
+	return vNumTrimmed
 }
