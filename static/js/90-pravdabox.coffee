@@ -39,7 +39,7 @@ P.connections = ->
             # Plot it on the map
             ip = event.data.split('\t')[1]
             P.map.ip2location ip, ->
-                P.map.render()
+                P.map.update()
 
             # plot it in connection window
             $('.widget-connections .filterwindow').html ''
@@ -268,42 +268,31 @@ P.map =
 
     render: ->
         P.map.scale_to_window()
+        $('.mapcontainer').mapael P.map.options
 
-        options = P.map.options
-        options.plots = {}
-        options.links = {}
+    update: ->
+        P.map.scale_to_window()
 
-#        options.plots =
-#            home:
-#                latitude: 48.86
-#                longitude: 2.3444
-#                text:
-#                    content: 'Paris'
-#            newyork:
-#                latitude: 40.667
-#                longitude: -73.833
-#                text:
-#                    content: 'New York'
-#        options.links =
-#            'parisnewyork':
-#                between:
-#                    ['paris', 'newyork']
+        plots = {}
+        links = {}
 
         for m in P.map.markers
-
             # plot
-            options.plots[m.ip] =
+            plots[m.ip] =
                 latitude: m.lat
                 longitude: m.lng
                 text:
                     content: "#{m.ip} (#{m.city_name})"
             # link
-            options.links[ "{#{P.map.homeip}-#{m.ip}" ] =
+            links[ "#{P.map.homeip}-#{m.ip}" ] =
                 between:
                     [P.map.homeip, m.ip]
 
-        $('.mapcontainer .map').html ''
-        $('.mapcontainer').mapael options
+        $('.mapcontainer').trigger 'update', [
+            newPlots: plots
+            newLinks: links
+            animDuration: 1000
+        ]
 
     ip2location: (ip, done) ->
         if not P.map.ip_coords[ip]

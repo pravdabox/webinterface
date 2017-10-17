@@ -73,7 +73,7 @@ P.connections = function() {
     if (P.connections_add(line)) {
       ip = event.data.split('\t')[1];
       P.map.ip2location(ip, function() {
-        return P.map.render();
+        return P.map.update();
       });
       $('.widget-connections .filterwindow').html('');
       c = 0;
@@ -376,27 +376,35 @@ P.map = {
     });
   },
   render: function() {
-    var k, len, m, options, ref;
     P.map.scale_to_window();
-    options = P.map.options;
-    options.plots = {};
-    options.links = {};
+    return $('.mapcontainer').mapael(P.map.options);
+  },
+  update: function() {
+    var k, len, links, m, plots, ref;
+    P.map.scale_to_window();
+    plots = {};
+    links = {};
     ref = P.map.markers;
     for (k = 0, len = ref.length; k < len; k++) {
       m = ref[k];
-      options.plots[m.ip] = {
+      plots[m.ip] = {
         latitude: m.lat,
         longitude: m.lng,
         text: {
           content: m.ip + " (" + m.city_name + ")"
         }
       };
-      options.links["{" + P.map.homeip + "-" + m.ip] = {
+      links[P.map.homeip + "-" + m.ip] = {
         between: [P.map.homeip, m.ip]
       };
     }
-    $('.mapcontainer .map').html('');
-    return $('.mapcontainer').mapael(options);
+    return $('.mapcontainer').trigger('update', [
+      {
+        newPlots: plots,
+        newLinks: links,
+        animDuration: 1000
+      }
+    ]);
   },
   ip2location: function(ip, done) {
     if (!P.map.ip_coords[ip]) {
