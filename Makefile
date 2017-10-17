@@ -1,7 +1,7 @@
 all: pack-assets-production
 	clear
 	go build
-	./webinterface
+	./webinterface -d
 
 pack-assets:
 	go-bindata-assetfs -debug static/... templates/...

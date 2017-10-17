@@ -33,6 +33,7 @@ var (
 	// flags
 	listenAddress = flag.String("l", "127.0.0.1:8080", "Web interface listen address")
 	version       = flag.Bool("v", false, "Display version")
+	devMode       = flag.Bool("d", false, "Developer-mode (don't cache assets)")
 
 	// templates
 	templateMap = template.FuncMap{
@@ -143,9 +144,13 @@ func webserver() {
 
 	// index
 	http.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
+		v := VERSION
+		if *devMode {
+			v = time.Now().Format("2006-01-02-150405.999999999")
+		}
 		model := Model{
 			Title:   "Pravdabox",
-			Version: VERSION,
+			Version: v,
 			MyIP:    myIP,
 		}
 		renderTemplate(rw, "templates/index.html", &model)
