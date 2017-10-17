@@ -3,7 +3,8 @@ P = window.P || {}
 
 P.ws_endpoint = 'ws://' + location.host + '/ws-bin'
 
-P.max_lines = 20
+P.max_lines = 100
+P.max_links = 10 # maximum of links on the map
 P.howmanycolors = 7
 
 P.dns = ->
@@ -275,6 +276,13 @@ P.map =
 
         plots = {}
         links = {}
+        deleteplots = []
+        deletelinks = []
+
+        if P.map.markers.length > P.max_links
+            deleted = P.map.markers.splice 1, 1
+            deleteplots.push deleted[0].ip
+            deletelinks.push "#{P.map.homeip}-#{deleted[0].ip}"
 
         for m in P.map.markers
             # plot
@@ -291,7 +299,9 @@ P.map =
         $('.mapcontainer').trigger 'update', [
             newPlots: plots
             newLinks: links
-            animDuration: 1000
+            deletePlotKeys: deleteplots
+            deleteLinkKeys: deletelinks
+            animDuration: 0
         ]
 
     ip2location: (ip, done) ->

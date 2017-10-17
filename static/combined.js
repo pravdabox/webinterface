@@ -26,7 +26,9 @@ P = window.P || {};
 
 P.ws_endpoint = 'ws://' + location.host + '/ws-bin';
 
-P.max_lines = 20;
+P.max_lines = 100;
+
+P.max_links = 10;
 
 P.howmanycolors = 7;
 
@@ -380,10 +382,17 @@ P.map = {
     return $('.mapcontainer').mapael(P.map.options);
   },
   update: function() {
-    var k, len, links, m, plots, ref;
+    var deleted, deletelinks, deleteplots, k, len, links, m, plots, ref;
     P.map.scale_to_window();
     plots = {};
     links = {};
+    deleteplots = [];
+    deletelinks = [];
+    if (P.map.markers.length > P.max_links) {
+      deleted = P.map.markers.splice(1, 1);
+      deleteplots.push(deleted[0].ip);
+      deletelinks.push(P.map.homeip + "-" + deleted[0].ip);
+    }
     ref = P.map.markers;
     for (k = 0, len = ref.length; k < len; k++) {
       m = ref[k];
@@ -402,7 +411,9 @@ P.map = {
       {
         newPlots: plots,
         newLinks: links,
-        animDuration: 1000
+        deletePlotKeys: deleteplots,
+        deleteLinkKeys: deletelinks,
+        animDuration: 0
       }
     ]);
   },
