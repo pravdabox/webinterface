@@ -23,7 +23,7 @@ import (
 
 const (
 	// VERSION holds the version
-	VERSION = "0.72.0"
+	VERSION = "0.73.0"
 
 	// MAXFORKS limits the forks of websockets
 	MAXFORKS = 10
@@ -112,7 +112,7 @@ func init() {
 	// get available version
 	availableVersion = getAvailableVersion()
 
-	// IP-coordinates cache
+	// initialize IP-coordinates cache
 	ipCoords = map[string]Location{}
 }
 
@@ -177,34 +177,21 @@ func webserver() {
 
 		// use cached info
 		l, ok := ipCoords[ip]
-		p("cache fetch:")
-		p(l)
-		p("")
 
 		if !ok {
 			// ip not in cache
-			loc := new(Location)
-			loc.IP = ip
+			l.IP = ip
 			numIP, _ := ip2long(net.ParseIP(ip))
 
 			row := db.QueryRow("SELECT country_name, region_name, city_name, latitude, longitude FROM ip2location_db5 WHERE ip_from < ? AND ip_to > ? LIMIT 1", numIP, numIP)
-			err := row.Scan(&loc.CountryName, &loc.RegionName, &loc.CityName, &loc.Latitude, &loc.Longitude)
+			err := row.Scan(&l.CountryName, &l.RegionName, &l.CityName, &l.Latitude, &l.Longitude)
 			if err != nil {
 				fmt.Fprintf(rw, "{\"error\": \"%s\"}", err.Error())
 			}
 
-			l = *loc
-
-			p("new fetch:")
-			p(l)
-			p("")
-
 			// store in cache
 			ipCoords[ip] = l
 		}
-
-		p("endjson:")
-		p(l)
 
 		// spit out json
 		b := new(bytes.Buffer)
