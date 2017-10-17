@@ -281,8 +281,8 @@ P.map =
             plots[m.ip] =
                 latitude: m.lat
                 longitude: m.lng
-                text:
-                    content: "#{m.ip} (#{m.city_name})"
+                tooltip:
+                    content: "#{m.ip}<br /><br />#{m.city_name}<br />#{m.region_name}<br />#{m.country_name}"
             # link
             links[ "#{P.map.homeip}-#{m.ip}" ] =
                 between:
