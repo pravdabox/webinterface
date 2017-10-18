@@ -181,6 +181,10 @@ P.widgets = ->
     for w in 'dns,connections,cookies,forms,passwords,urls,images'.split ','
         $(".widget-#{w}").resizable
             alsoResize: ".widget-#{w} .filterwindow"
+            stop: (ev, ui) ->
+                $this = $(this)
+                width = $this.width() - 22
+                $this.find('.filterwindow').css('width', width + 'px')
 
 P.firmwareupgrade = ->
     $('#start_firmwareupgrade').click ->

@@ -260,7 +260,13 @@ P.widgets = function() {
   for (k = 0, len = ref.length; k < len; k++) {
     w = ref[k];
     results.push($(".widget-" + w).resizable({
-      alsoResize: ".widget-" + w + " .filterwindow"
+      alsoResize: ".widget-" + w + " .filterwindow",
+      stop: function(ev, ui) {
+        var $this, width;
+        $this = $(this);
+        width = $this.width() - 22;
+        return $this.find('.filterwindow').css('width', width + 'px');
+      }
     }));
   }
   return results;
