@@ -178,6 +178,9 @@ P.widgets = ->
     # load positions
     P.loadwidgetpositions()
 
+    # make them toggleable
+    P.init_widgettoggle()
+
     # make it draggable
     $('.widget').draggable
         handle: '.head'
@@ -194,6 +197,11 @@ P.widgets = ->
                 width = $this.width() - 22
                 $this.find('.filterwindow').css('width', width + 'px')
                 P.savewidgetpositions()
+
+P.init_widgettoggle = ->
+    $('.widgettoggle').on 'click', ->
+        $w = $(this)
+        return false
 
 P.widgetpositions = {}
 

@@ -444,6 +444,7 @@ P.urls_add = function(url) {
 P.widgets = function() {
   var k, len, ref, results, w;
   P.loadwidgetpositions();
+  P.init_widgettoggle();
   $('.widget').draggable({
     handle: '.head',
     stack: '.widget',
@@ -467,6 +468,14 @@ P.widgets = function() {
     }));
   }
   return results;
+};
+
+P.init_widgettoggle = function() {
+  return $('.widgettoggle').on('click', function() {
+    var $w;
+    $w = $(this);
+    return false;
+  });
 };
 
 P.widgetpositions = {};
