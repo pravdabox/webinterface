@@ -449,8 +449,5 @@ $(function() {
   P.urls();
   P.widgets();
   P.firmwareupgrade();
-  P.map.init();
-  return $(window).resize(function() {
-    return P.map.init();
-  });
+  return P.map.init();
 });

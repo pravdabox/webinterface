@@ -341,6 +341,3 @@ $ ->
     P.firmwareupgrade()
     P.map.init()
 
-    $(window).resize ->
-        P.map.init()
-
