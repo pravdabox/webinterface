@@ -489,9 +489,11 @@ P.colorize = function(block_with_ip) {
 
 P.widgets = {
   positions: {},
+  visibility: {},
   init: function() {
     var k, len, ref, results, w;
     P.widgets.loadpositions();
+    P.widgets.loadvisibilities();
     P.widgets.init_toggle();
     $('.widget').draggable({
       handle: '.head',
@@ -518,9 +520,18 @@ P.widgets = {
     return results;
   },
   init_toggle: function() {
+    P.widgets.setstate();
     return $('.widgettoggle').on('click', function() {
-      var $w;
+      var $w, w;
       $w = $(this);
+      w = $w.data('name');
+      if (P.widgets.visibility[w] === 0) {
+        P.widgets.visibility[w] = 1;
+      } else {
+        P.widgets.visibility[w] = 0;
+      }
+      P.widgets.savepositions();
+      P.widgets.setstate();
       return false;
     });
   },
@@ -530,7 +541,7 @@ P.widgets = {
     for (k = 0, len = ref.length; k < len; k++) {
       w = ref[k];
       $w = $(".widget-" + w);
-      P.widgets.positions[w] = [$w.position().top, $w.position().left, $w.width(), $w.height() - 42];
+      P.widgets.positions[w] = [$w.position().top, $w.position().left, $w.width(), $w.height() - 42, P.widgets.visibility[w]];
     }
     return Cookies.set('pb_widgets', JSON.stringify(P.widgets.positions), {
       expires: 360
@@ -553,6 +564,41 @@ P.widgets = {
       }
       return results;
     } catch (error) {}
+  },
+  loadvisibilities: function() {
+    var k, l, len, len1, ref, ref1, results, results1, w;
+    try {
+      P.widgets.positions = JSON.parse(Cookies.get('pb_widgets'));
+      ref = 'dns,connections,cookies,forms,passwords,urls,images'.split(',');
+      results = [];
+      for (k = 0, len = ref.length; k < len; k++) {
+        w = ref[k];
+        results.push(P.widgets.visibility[w] = P.widgets.positions[w][4]);
+      }
+      return results;
+    } catch (error) {
+      ref1 = 'dns,connections,cookies,forms,passwords,urls,images'.split(',');
+      results1 = [];
+      for (l = 0, len1 = ref1.length; l < len1; l++) {
+        w = ref1[l];
+        results1.push(P.widgets.visibility[w] = 1);
+      }
+      return results1;
+    }
+  },
+  setstate: function() {
+    var k, len, ref, results, w;
+    ref = 'dns,connections,cookies,forms,passwords,urls,images'.split(',');
+    results = [];
+    for (k = 0, len = ref.length; k < len; k++) {
+      w = ref[k];
+      if (P.widgets.visibility[w] === 1) {
+        results.push($(".widget-" + w).show());
+      } else {
+        results.push($(".widget-" + w).css('visibility', 'hidden'));
+      }
+    }
+    return results;
   }
 };
 

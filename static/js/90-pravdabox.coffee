@@ -220,11 +220,15 @@ P.colorize = (block_with_ip) ->
 
 P.widgets =
     positions: {}
+    visibility: {}
 
     init: ->
 
         # load positions
         P.widgets.loadpositions()
+
+        # load visibilities
+        P.widgets.loadvisibilities()
 
         # make them toggleable
         P.widgets.init_toggle()
@@ -247,8 +251,20 @@ P.widgets =
                     P.widgets.savepositions()
 
     init_toggle: ->
+        P.widgets.setstate()
+
         $('.widgettoggle').on 'click', ->
             $w = $(this)
+            w = $w.data('name')
+            if P.widgets.visibility[w] == 0
+                P.widgets.visibility[w] = 1
+            else
+                P.widgets.visibility[w] = 0
+
+            P.widgets.savepositions()
+            P.widgets.setstate()
+
+            # no href-action on click
             return false
 
     savepositions: ->
@@ -259,6 +275,7 @@ P.widgets =
                 $w.position().left
                 $w.width()
                 $w.height() - 42
+                P.widgets.visibility[w]
             ]
 
         Cookies.set 'pb_widgets', JSON.stringify(P.widgets.positions),
@@ -274,6 +291,23 @@ P.widgets =
                 $w.css 'width', P.widgets.positions[w][2]
                 $w.css 'height', P.widgets.positions[w][3] + 42
                 $w.find('.filterwindow').css 'height', P.widgets.positions[w][3]
+
+    loadvisibilities: ->
+        try
+            P.widgets.positions = JSON.parse(Cookies.get 'pb_widgets')
+            for w in 'dns,connections,cookies,forms,passwords,urls,images'.split ','
+                P.widgets.visibility[w] = P.widgets.positions[w][4]
+        catch
+            for w in 'dns,connections,cookies,forms,passwords,urls,images'.split ','
+                P.widgets.visibility[w] = 1
+
+    setstate: ->
+        # determine whether or not to display the widget
+        for w in 'dns,connections,cookies,forms,passwords,urls,images'.split ','
+            if P.widgets.visibility[w] == 1
+                $(".widget-#{w}").show()
+            else
+                $(".widget-#{w}").css 'visibility', 'hidden'
 
 P.map =
     markers: []
