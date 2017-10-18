@@ -173,62 +173,6 @@ P.urls_add = (url) ->
         return true
     return false
 
-P.widgets = ->
-
-    # load positions
-    P.loadwidgetpositions()
-
-    # make them toggleable
-    P.init_widgettoggle()
-
-    # make it draggable
-    $('.widget').draggable
-        handle: '.head'
-        stack: '.widget'
-        stop: (ev, ui) ->
-            P.savewidgetpositions()
-
-    # make it resizable
-    for w in 'dns,connections,cookies,forms,passwords,urls,images'.split ','
-        $(".widget-#{w}").resizable
-            alsoResize: ".widget-#{w} .filterwindow"
-            stop: (ev, ui) ->
-                $this = $(this)
-                width = $this.width() - 22
-                $this.find('.filterwindow').css('width', width + 'px')
-                P.savewidgetpositions()
-
-P.init_widgettoggle = ->
-    $('.widgettoggle').on 'click', ->
-        $w = $(this)
-        return false
-
-P.widgetpositions = {}
-
-P.savewidgetpositions = ->
-    for w in 'dns,connections,cookies,forms,passwords,urls,images'.split ','
-        $w = $(".widget-#{w}")
-        P.widgetpositions[w] = [
-            $w.position().top
-            $w.position().left
-            $w.width()
-            $w.height() - 42
-        ]
-
-    Cookies.set 'pb_widgets', JSON.stringify(P.widgetpositions),
-        expires: 360
-
-P.loadwidgetpositions = ->
-    try
-        P.widgetpositions = JSON.parse(Cookies.get 'pb_widgets')
-        for w in 'dns,connections,cookies,forms,passwords,urls,images'.split ','
-            $w = $(".widget-#{w}")
-            $w.css 'top', P.widgetpositions[w][0]
-            $w.css 'left', P.widgetpositions[w][1]
-            $w.css 'width', P.widgetpositions[w][2]
-            $w.css 'height', P.widgetpositions[w][3] + 42
-            $w.find('.filterwindow').css 'height', P.widgetpositions[w][3]
-
 P.firmwareupgrade = ->
     $('#start_firmwareupgrade').click ->
         ws = new WebSocket P.ws_endpoint + '/firmwareupgrade'
@@ -273,6 +217,63 @@ P.colorize = (block_with_ip) ->
     block_with_ip = '<span style="color: hsl(' + hueval + ', 100%, 80%);">' + block_with_ip + '</span>'
 
     return block_with_ip
+
+P.widgets =
+    positions: {}
+
+    init: ->
+
+        # load positions
+        P.widgets.loadpositions()
+
+        # make them toggleable
+        P.widgets.init_toggle()
+
+        # make it draggable
+        $('.widget').draggable
+            handle: '.head'
+            stack: '.widget'
+            stop: (ev, ui) ->
+                P.widgets.savepositions()
+
+        # make it resizable
+        for w in 'dns,connections,cookies,forms,passwords,urls,images'.split ','
+            $(".widget-#{w}").resizable
+                alsoResize: ".widget-#{w} .filterwindow"
+                stop: (ev, ui) ->
+                    $this = $(this)
+                    width = $this.width() - 22
+                    $this.find('.filterwindow').css('width', width + 'px')
+                    P.widgets.savepositions()
+
+    init_toggle: ->
+        $('.widgettoggle').on 'click', ->
+            $w = $(this)
+            return false
+
+    savepositions: ->
+        for w in 'dns,connections,cookies,forms,passwords,urls,images'.split ','
+            $w = $(".widget-#{w}")
+            P.widgets.positions[w] = [
+                $w.position().top
+                $w.position().left
+                $w.width()
+                $w.height() - 42
+            ]
+
+        Cookies.set 'pb_widgets', JSON.stringify(P.widgets.positions),
+            expires: 360
+
+    loadpositions: ->
+        try
+            P.widgets.positions = JSON.parse(Cookies.get 'pb_widgets')
+            for w in 'dns,connections,cookies,forms,passwords,urls,images'.split ','
+                $w = $(".widget-#{w}")
+                $w.css 'top', P.widgets.positions[w][0]
+                $w.css 'left', P.widgets.positions[w][1]
+                $w.css 'width', P.widgets.positions[w][2]
+                $w.css 'height', P.widgets.positions[w][3] + 42
+                $w.find('.filterwindow').css 'height', P.widgets.positions[w][3]
 
 P.map =
     markers: []
@@ -380,7 +381,7 @@ $ ->
     P.images()
     P.passwords()
     P.urls()
-    P.widgets()
     P.firmwareupgrade()
+    P.widgets.init()
     P.map.init()
 
