@@ -276,13 +276,9 @@ P.map =
 
         plots = {}
         links = {}
-        deleteplots = []
-        deletelinks = []
 
-        if P.map.markers.length > P.max_links
-            deleted = P.map.markers.splice 1, 1
-            deleteplots.push deleted[0].ip
-            deletelinks.push "#{P.map.homeip}-#{deleted[0].ip}"
+        if P.map.markers.length > P.max_links + 1
+            P.map.markers.splice 1, 1
 
         for m in P.map.markers
             # plot
@@ -299,8 +295,8 @@ P.map =
         $('.mapcontainer').trigger 'update', [
             newPlots: plots
             newLinks: links
-            deletePlotKeys: deleteplots
-            deleteLinkKeys: deletelinks
+            deletePlotKeys: 'all'
+            deleteLinkKeys: 'all'
             animDuration: 0
         ]
 
