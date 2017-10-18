@@ -305,7 +305,7 @@ P.widgets =
         # determine whether or not to display the widget
         for w in 'dns,connections,cookies,forms,passwords,urls,images'.split ','
             if P.widgets.visibility[w] == 1
-                $(".widget-#{w}").show()
+                $(".widget-#{w}").css 'visibility', 'visible'
             else
                 $(".widget-#{w}").css 'visibility', 'hidden'
 
