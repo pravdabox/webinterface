@@ -294,19 +294,21 @@ P.savewidgetpositions = function() {
 
 P.loadwidgetpositions = function() {
   var $w, k, len, ref, results, w;
-  P.widgetpositions = JSON.parse(Cookies.get('pb_widgets'));
-  ref = 'dns,connections,cookies,forms,passwords,urls,images'.split(',');
-  results = [];
-  for (k = 0, len = ref.length; k < len; k++) {
-    w = ref[k];
-    $w = $(".widget-" + w);
-    $w.css('top', P.widgetpositions[w][0]);
-    $w.css('left', P.widgetpositions[w][1]);
-    $w.css('width', P.widgetpositions[w][2]);
-    $w.css('height', P.widgetpositions[w][3] + 42);
-    results.push($w.find('.filterwindow').css('height', P.widgetpositions[w][3]));
-  }
-  return results;
+  try {
+    P.widgetpositions = JSON.parse(Cookies.get('pb_widgets'));
+    ref = 'dns,connections,cookies,forms,passwords,urls,images'.split(',');
+    results = [];
+    for (k = 0, len = ref.length; k < len; k++) {
+      w = ref[k];
+      $w = $(".widget-" + w);
+      $w.css('top', P.widgetpositions[w][0]);
+      $w.css('left', P.widgetpositions[w][1]);
+      $w.css('width', P.widgetpositions[w][2]);
+      $w.css('height', P.widgetpositions[w][3] + 42);
+      results.push($w.find('.filterwindow').css('height', P.widgetpositions[w][3]));
+    }
+    return results;
+  } catch (error) {}
 };
 
 P.firmwareupgrade = function() {

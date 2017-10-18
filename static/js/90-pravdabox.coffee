@@ -211,14 +211,15 @@ P.savewidgetpositions = ->
         expires: 360
 
 P.loadwidgetpositions = ->
-    P.widgetpositions = JSON.parse(Cookies.get 'pb_widgets')
-    for w in 'dns,connections,cookies,forms,passwords,urls,images'.split ','
-        $w = $(".widget-#{w}")
-        $w.css 'top', P.widgetpositions[w][0]
-        $w.css 'left', P.widgetpositions[w][1]
-        $w.css 'width', P.widgetpositions[w][2]
-        $w.css 'height', P.widgetpositions[w][3] + 42
-        $w.find('.filterwindow').css 'height', P.widgetpositions[w][3]
+    try
+        P.widgetpositions = JSON.parse(Cookies.get 'pb_widgets')
+        for w in 'dns,connections,cookies,forms,passwords,urls,images'.split ','
+            $w = $(".widget-#{w}")
+            $w.css 'top', P.widgetpositions[w][0]
+            $w.css 'left', P.widgetpositions[w][1]
+            $w.css 'width', P.widgetpositions[w][2]
+            $w.css 'height', P.widgetpositions[w][3] + 42
+            $w.find('.filterwindow').css 'height', P.widgetpositions[w][3]
 
 P.firmwareupgrade = ->
     $('#start_firmwareupgrade').click ->
