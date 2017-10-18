@@ -178,7 +178,9 @@ P.widgets = ->
         handle: '.head'
         stack: '.widget'
 
-    $('.widget').resizable()
+    for w in 'dns,connections,cookies,forms,passwords,urls,images'.split ','
+        $(".widget-#{w}").resizable
+            alsoResize: ".widget-#{w} .filterwindow"
 
 P.firmwareupgrade = ->
     $('#start_firmwareupgrade').click ->

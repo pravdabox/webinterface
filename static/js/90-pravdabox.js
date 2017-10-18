@@ -250,11 +250,20 @@ P.urls_add = function(url) {
 };
 
 P.widgets = function() {
+  var k, len, ref, results, w;
   $('.widget').draggable({
     handle: '.head',
     stack: '.widget'
   });
-  return $('.widget').resizable();
+  ref = 'dns,connections,cookies,forms,passwords,urls,images'.split(',');
+  results = [];
+  for (k = 0, len = ref.length; k < len; k++) {
+    w = ref[k];
+    results.push($(".widget-" + w).resizable({
+      alsoResize: ".widget-" + w + " .filterwindow"
+    }));
+  }
+  return results;
 };
 
 P.firmwareupgrade = function() {
