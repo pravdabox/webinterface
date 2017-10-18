@@ -18,7 +18,7 @@ import (
 	"os"
 	"os/exec"
 	"sort"
-	s "strings"
+	"strings"
 	"time"
 )
 
@@ -42,7 +42,7 @@ var (
 	// templates
 	templateMap = template.FuncMap{
 		"Upper": func(str string) string {
-			return s.ToUpper(str)
+			return strings.ToUpper(str)
 		},
 	}
 	templates = template.New("").Funcs(templateMap)
@@ -121,7 +121,7 @@ func init() {
 		}
 		defer resp.Body.Close()
 		r, _ := ioutil.ReadAll(resp.Body)
-		myIP = s.TrimSpace(string(r))
+		myIP = strings.TrimSpace(string(r))
 
 		// get available version
 		availableVersion = getAvailableVersion()
@@ -266,7 +266,7 @@ func imagesWatcher() {
 			select {
 			case event := <-watcher.Events:
 				if event.Op&fsnotify.Create == fsnotify.Create {
-					filename := s.Replace(event.Name, "/tmp/driftnet/", "", 1)
+					filename := strings.Replace(event.Name, "/tmp/driftnet/", "", 1)
 					if _, err = outfile.WriteString(filename + "\n"); err != nil {
 						p("error:", err.Error())
 					}
@@ -333,10 +333,10 @@ func getAvailableVersion() string {
 		p(err.Error())
 		return "-"
 	}
-	pkgInfo := s.TrimSpace(string(r))
-	afterWebinterface := s.Split(pkgInfo, "Package: webinterface")[1]
-	versionLine := s.Split(afterWebinterface, "Depends:")[0]
-	vNum := s.Split(versionLine, "Version:")[1]
-	vNumTrimmed := s.TrimSpace(vNum)
+	pkgInfo := strings.TrimSpace(string(r))
+	afterWebinterface := strings.Split(pkgInfo, "Package: webinterface")[1]
+	versionLine := strings.Split(afterWebinterface, "Depends:")[0]
+	vNum := strings.Split(versionLine, "Version:")[1]
+	vNumTrimmed := strings.TrimSpace(vNum)
 	return vNumTrimmed
 }
