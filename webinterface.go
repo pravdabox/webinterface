@@ -89,6 +89,8 @@ func (fi byMtime) Swap(i, j int)      { fi[i], fi[j] = fi[j], fi[i] }
 func (fi byMtime) Less(i, j int) bool { return fi[i].ModTime().Before(fi[j].ModTime()) }
 
 func init() {
+	flag.Parse()
+
 	// Parse all of the bindata templates
 	for _, path := range AssetNames() {
 		bytes, err := Asset(path)
@@ -111,25 +113,25 @@ func init() {
 		p(err.Error())
 	}
 
-	// get current public IP
-	resp, err := http.Get("http://wtfismyip.com/text")
-	if err != nil {
-		p(err.Error())
-	}
-	defer resp.Body.Close()
-	r, _ := ioutil.ReadAll(resp.Body)
-	myIP = s.TrimSpace(string(r))
+	if *devMode == false {
+		// get current public IP
+		resp, err := http.Get("http://wtfismyip.com/text")
+		if err != nil {
+			p(err.Error())
+		}
+		defer resp.Body.Close()
+		r, _ := ioutil.ReadAll(resp.Body)
+		myIP = s.TrimSpace(string(r))
 
-	// get available version
-	availableVersion = getAvailableVersion()
+		// get available version
+		availableVersion = getAvailableVersion()
+	}
 
 	// initialize IP-coordinates cache
 	ipCoords = map[string]Location{}
 }
 
 func main() {
-	flag.Parse()
-
 	if *version {
 		p(VERSION)
 		os.Exit(0)
