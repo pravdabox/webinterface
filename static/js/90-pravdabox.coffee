@@ -304,10 +304,14 @@ P.widgets =
     setstate: ->
         # determine whether or not to display the widget
         for w in 'dns,connections,cookies,forms,passwords,urls,images'.split ','
+            $menu = $(".widgettoggle[data-name=#{w}]")
+            menutext = $menu.text().replace /✓/g, ''
             if P.widgets.visibility[w] == 1
                 $(".widget-#{w}").css 'visibility', 'visible'
+                menutext = '✓' + menutext
             else
                 $(".widget-#{w}").css 'visibility', 'hidden'
+            $menu.text menutext
 
 P.map =
     markers: []

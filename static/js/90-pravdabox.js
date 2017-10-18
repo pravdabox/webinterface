@@ -395,16 +395,20 @@ P.widgets = {
     }
   },
   setstate: function() {
-    var k, len, ref, results, w;
+    var $menu, k, len, menutext, ref, results, w;
     ref = 'dns,connections,cookies,forms,passwords,urls,images'.split(',');
     results = [];
     for (k = 0, len = ref.length; k < len; k++) {
       w = ref[k];
+      $menu = $(".widgettoggle[data-name=" + w + "]");
+      menutext = $menu.text().replace(/✓/g, '');
       if (P.widgets.visibility[w] === 1) {
-        results.push($(".widget-" + w).css('visibility', 'visible'));
+        $(".widget-" + w).css('visibility', 'visible');
+        menutext = '✓' + menutext;
       } else {
-        results.push($(".widget-" + w).css('visibility', 'hidden'));
+        $(".widget-" + w).css('visibility', 'hidden');
       }
+      results.push($menu.text(menutext));
     }
     return results;
   }
