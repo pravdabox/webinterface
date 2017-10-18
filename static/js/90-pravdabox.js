@@ -434,7 +434,7 @@ P.map = {
   scale_to_window: function() {
     return $('.mapcontainer, .mapcontainer .map').css({
       width: $(window).width(),
-      height: $(window).height() - 200
+      height: $(window).height() - 20
     });
   }
 };

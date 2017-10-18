@@ -24,7 +24,7 @@ import (
 
 const (
 	// VERSION holds the version
-	VERSION = "0.78.0"
+	VERSION = "0.79.0"
 
 	// MAXFORKS limits the forks of websockets
 	MAXFORKS = 10

@@ -327,7 +327,7 @@ P.map =
     scale_to_window: ->
         $('.mapcontainer, .mapcontainer .map').css
             width: $(window).width()
-            height: $(window).height() - 200 #actually doesn't work with mapael :(
+            height: $(window).height() - 20
 
 $ ->
     P.dns()
