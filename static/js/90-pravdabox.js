@@ -251,9 +251,13 @@ P.urls_add = function(url) {
 
 P.widgets = function() {
   var k, len, ref, results, w;
+  P.loadwidgetpositions();
   $('.widget').draggable({
     handle: '.head',
-    stack: '.widget'
+    stack: '.widget',
+    stop: function(ev, ui) {
+      return P.savewidgetpositions();
+    }
   });
   ref = 'dns,connections,cookies,forms,passwords,urls,images'.split(',');
   results = [];
@@ -265,9 +269,42 @@ P.widgets = function() {
         var $this, width;
         $this = $(this);
         width = $this.width() - 22;
-        return $this.find('.filterwindow').css('width', width + 'px');
+        $this.find('.filterwindow').css('width', width + 'px');
+        return P.savewidgetpositions();
       }
     }));
+  }
+  return results;
+};
+
+P.widgetpositions = {};
+
+P.savewidgetpositions = function() {
+  var $w, k, len, ref, w;
+  ref = 'dns,connections,cookies,forms,passwords,urls,images'.split(',');
+  for (k = 0, len = ref.length; k < len; k++) {
+    w = ref[k];
+    $w = $(".widget-" + w);
+    P.widgetpositions[w] = [$w.position().top, $w.position().left, $w.width(), $w.height() - 42];
+  }
+  return Cookies.set('pb_widgets', JSON.stringify(P.widgetpositions), {
+    expires: 360
+  });
+};
+
+P.loadwidgetpositions = function() {
+  var $w, k, len, ref, results, w;
+  P.widgetpositions = JSON.parse(Cookies.get('pb_widgets'));
+  ref = 'dns,connections,cookies,forms,passwords,urls,images'.split(',');
+  results = [];
+  for (k = 0, len = ref.length; k < len; k++) {
+    w = ref[k];
+    $w = $(".widget-" + w);
+    $w.css('top', P.widgetpositions[w][0]);
+    $w.css('left', P.widgetpositions[w][1]);
+    $w.css('width', P.widgetpositions[w][2]);
+    $w.css('height', P.widgetpositions[w][3] + 42);
+    results.push($w.find('.filterwindow').css('height', P.widgetpositions[w][3]));
   }
   return results;
 };
