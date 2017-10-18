@@ -115,6 +115,7 @@ img {
     border-right: 1px solid #4bb5ec;
     padding: 5px 10px 5px;
     border-radius: 5px 5px 0 0;
+    cursor: move;
 }
 
 .widget .filterwindow {

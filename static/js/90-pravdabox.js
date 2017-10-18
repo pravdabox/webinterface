@@ -249,6 +249,13 @@ P.urls_add = function(url) {
   return false;
 };
 
+P.widgets = function() {
+  return $('.widget').draggable({
+    handle: '.head',
+    stack: '.widget'
+  });
+};
+
 P.firmwareupgrade = function() {
   return $('#start_firmwareupgrade').click(function() {
     var ws;
@@ -424,6 +431,7 @@ $(function() {
   P.images();
   P.passwords();
   P.urls();
+  P.widgets();
   P.firmwareupgrade();
   P.map.init();
   return $(window).resize(function() {

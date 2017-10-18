@@ -173,6 +173,11 @@ P.urls_add = (url) ->
         return true
     return false
 
+P.widgets = ->
+    $('.widget').draggable
+        handle: '.head'
+        stack: '.widget'
+
 P.firmwareupgrade = ->
     $('#start_firmwareupgrade').click ->
         ws = new WebSocket P.ws_endpoint + '/firmwareupgrade'
@@ -324,6 +329,7 @@ $ ->
     P.images()
     P.passwords()
     P.urls()
+    P.widgets()
     P.firmwareupgrade()
     P.map.init()
 
