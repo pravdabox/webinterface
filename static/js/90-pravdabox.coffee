@@ -178,6 +178,8 @@ P.widgets = ->
         handle: '.head'
         stack: '.widget'
 
+    $('.widget').resizable()
+
 P.firmwareupgrade = ->
     $('#start_firmwareupgrade').click ->
         ws = new WebSocket P.ws_endpoint + '/firmwareupgrade'

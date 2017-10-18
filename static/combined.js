@@ -276,10 +276,11 @@ P.urls_add = function(url) {
 };
 
 P.widgets = function() {
-  return $('.widget').draggable({
+  $('.widget').draggable({
     handle: '.head',
     stack: '.widget'
   });
+  return $('.widget').resizable();
 };
 
 P.firmwareupgrade = function() {
