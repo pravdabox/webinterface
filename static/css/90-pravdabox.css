@@ -104,17 +104,17 @@ img {
 }
 
 .widget .head {
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: -1px;
     color: #fff;
-    background-color: rgba(0, 0, 255, 0.6);
-    border-top: 2px solid #66f;
-    border-left: 2px solid #66f;
-    border-right: 2px solid #66f;
+    background-color: rgba(22, 87, 155, 0.6);
+    border-top: 1px solid #4bb5ec;
+    border-left: 1px solid #4bb5ec;
+    border-right: 1px solid #4bb5ec;
     padding: 5px 10px 5px;
-  -webkit-border-radius: 5px 5px 0 0;
-     -moz-border-radius: 5px 5px 0 0;
-      -ms-border-radius: 5px 5px 0 0;
-       -o-border-radius: 5px 5px 0 0;
-          border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0;
 }
 
 .widget .filterwindow {
@@ -122,30 +122,22 @@ img {
     font-size: 10pt;
     line-height: 1.0;
     color: #fff;
-    background-color: rgba(0, 0, 0, 0.6);
-    border: 2px solid #66f;
+    background-color: rgba(10, 17, 25, 0.6);
+    border: 1px solid #4bb5ec;
     padding: 5px 10px 5px;
-  -webkit-border-radius: 0 0 5px 5px;
-     -moz-border-radius: 0 0 5px 5px;
-      -ms-border-radius: 0 0 5px 5px;
-       -o-border-radius: 0 0 5px 5px;
-          border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
 }
 
 .widget-urls .head, .widget-urls .filterwindow {
-    border-right: 1px solid #66f;
+    border-right: 1px solid #4bb5ec;
 }
 
 .widget-images .head, .widget-images .filterwindow{
-    border-left: 1px solid #66f;
+    border-left: 1px solid #4bb5ec;
 }
 
 .widget-images .filterwindow, .widget-urls .filterwindow {
     height: 166px;
-  -webkit-border-radius: 0;
-     -moz-border-radius: 0;
-      -ms-border-radius: 0;
-       -o-border-radius: 0;
-          border-radius: 0;
+    border-radius: 0;
 }
 
