@@ -113,7 +113,7 @@ func staticCombinedCss() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "static/combined.css", size: 126116, mode: os.FileMode(420), modTime: time.Unix(1508322711, 0)}
+	info := bindataFileInfo{name: "static/combined.css", size: 126116, mode: os.FileMode(420), modTime: time.Unix(1508322833, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -133,7 +133,7 @@ func staticCombinedJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "static/combined.js", size: 382773, mode: os.FileMode(420), modTime: time.Unix(1508322711, 0)}
+	info := bindataFileInfo{name: "static/combined.js", size: 382773, mode: os.FileMode(420), modTime: time.Unix(1508322833, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -573,7 +573,7 @@ func staticJs90PravdaboxJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "static/js/90-pravdabox.js", size: 11326, mode: os.FileMode(420), modTime: time.Unix(1508322711, 0)}
+	info := bindataFileInfo{name: "static/js/90-pravdabox.js", size: 11326, mode: os.FileMode(420), modTime: time.Unix(1508322833, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }

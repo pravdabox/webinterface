@@ -1,12 +1,9 @@
-all: pack-assets-production
+all: pack-assets
 	clear
 	go build
 	./webinterface -d
 
 pack-assets:
-	go-bindata-assetfs -debug static/... templates/...
-
-pack-assets-production:
 	coffee -b -c static/js/90-pravdabox.coffee
 	cat static/js/*.js > static/combined.js
 	cat static/css/*.css > static/combined.css
