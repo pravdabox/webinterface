@@ -187,7 +187,7 @@ P.firmwareupgrade = ->
             setInterval ->
                 try
                     $.ajax
-                        url: 'http://' + location.host + '/upgrade/mapimport_done'
+                        url: 'http://' + location.host + '/firmwareupgrade/mapimport_done'
                         success: (data) ->
                             if data == 'true'
                                 location.href = 'http://' + location.host

@@ -16,7 +16,6 @@ import (
 	"net"
 	"net/http"
 	"os"
-	"os/exec"
 	"sort"
 	"strings"
 	"time"
@@ -24,7 +23,7 @@ import (
 
 const (
 	// VERSION holds the version
-	VERSION = "1.2.1"
+	VERSION = "1.2.2"
 
 	// MAXFORKS limits the forks of websockets
 	MAXFORKS = 10
@@ -221,19 +220,23 @@ func webserver() {
 		renderTemplate(rw, "templates/about.html", &model)
 	})
 
-	// firmwareupdate
-	http.HandleFunc("/firmwareupdate", func(rw http.ResponseWriter, req *http.Request) {
+	// firmwareupgrade
+	http.HandleFunc("/firmwareupgrade", func(rw http.ResponseWriter, req *http.Request) {
 		model := Model{
-			Title:            "Pravdabox - Firmwareupdate",
+			Title:            "Pravdabox - Firmwareupgrade",
 			Version:          VERSION,
 			AvailableVersion: availableVersion,
 		}
-		renderTemplate(rw, "templates/firmwareupdate.html", &model)
+		renderTemplate(rw, "templates/firmwareupgrade.html", &model)
 	})
 
-	// firmwareupdate
-	http.HandleFunc("/firmwareupdate-run", func(rw http.ResponseWriter, req *http.Request) {
-		exec.Command("/usr/sbin/upgrader")
+	// mapimport done?
+	http.HandleFunc("/firmwareupgrade/mapimport_done", func(rw http.ResponseWriter, req *http.Request) {
+		status := "false"
+		if _, err := os.Stat("/tmp/mapimport-done.status"); !os.IsNotExist(err) {
+			status = "true"
+		}
+		fmt.Fprintf(rw, status)
 	})
 
 	// upgrade
@@ -243,15 +246,6 @@ func webserver() {
 			Version: VERSION,
 		}
 		renderTemplate(rw, "templates/upgrade.html", &model)
-	})
-
-	// upgrade done?
-	http.HandleFunc("/upgrade/mapimport_done", func(rw http.ResponseWriter, req *http.Request) {
-		status := "false"
-		if _, err := os.Stat("/tmp/mapimport-done.status"); !os.IsNotExist(err) {
-			status = "true"
-		}
-		fmt.Fprintf(rw, status)
 	})
 
 	http.ListenAndServe(*listenAddress, nil)

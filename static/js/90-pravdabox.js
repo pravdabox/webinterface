@@ -263,7 +263,7 @@ P.firmwareupgrade = function() {
       return setInterval(function() {
         try {
           return $.ajax({
-            url: 'http://' + location.host + '/upgrade/mapimport_done',
+            url: 'http://' + location.host + '/firmwareupgrade/mapimport_done',
             success: function(data) {
               if (data === 'true') {
                 return location.href = 'http://' + location.host;
