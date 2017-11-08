@@ -182,6 +182,8 @@ P.firmwareupgrade = ->
 
         ws.onclose = (event) ->
             $('<div class="l">Writing in process, please wait. Do not turn off your Pravdabox!</div>').appendTo '.firmwareupgrade'
+
+            appended = false
             setInterval ->
                 try
                     $.ajax
@@ -190,7 +192,9 @@ P.firmwareupgrade = ->
                             if data == 'true'
                                 location.href = 'http://' + location.host
                             else
-                                $('<div class="l">Importing geolocation data, please wait. This can take some minutes. Will reload automatically when done.</div>').appendTo '.firmwareupgrade'
+                                if not appended
+                                    $('<div class="l">Importing geolocation data, please wait. This can take some minutes. Will reload automatically when done.</div>').appendTo '.firmwareupgrade'
+                                    appended = true
             , 5000
 
         $('#start_firmwareupgrade').remove()

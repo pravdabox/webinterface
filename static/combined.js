@@ -449,7 +449,9 @@ P.firmwareupgrade = function() {
       return $('<div class="l">' + event.data + '</div>').appendTo('.firmwareupgrade');
     };
     ws.onclose = function(event) {
+      var appended;
       $('<div class="l">Writing in process, please wait. Do not turn off your Pravdabox!</div>').appendTo('.firmwareupgrade');
+      appended = false;
       return setInterval(function() {
         try {
           return $.ajax({
@@ -458,7 +460,10 @@ P.firmwareupgrade = function() {
               if (data === 'true') {
                 return location.href = 'http://' + location.host;
               } else {
-                return $('<div class="l">Importing geolocation data, please wait. This can take some minutes. Will reload automatically when done.</div>').appendTo('.firmwareupgrade');
+                if (!appended) {
+                  $('<div class="l">Importing geolocation data, please wait. This can take some minutes. Will reload automatically when done.</div>').appendTo('.firmwareupgrade');
+                  return appended = true;
+                }
               }
             }
           });
