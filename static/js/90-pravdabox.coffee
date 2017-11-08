@@ -185,9 +185,12 @@ P.firmwareupgrade = ->
             setInterval ->
                 try
                     $.ajax
-                        url: 'http://' + location.host
-                        success: ->
-                            location.href = 'http://' + location.host
+                        url: 'http://' + location.host + '/upgrade/mapimport_done'
+                        success: (data) ->
+                            if data == 'true'
+                                location.href = 'http://' + location.host
+                            else
+                                $('<div class="l">Importing geolocation data, please wait. This can take some minutes. Will reload automatically when done.</div>').appendTo '.firmwareupgrade'
             , 5000
 
         $('#start_firmwareupgrade').remove()

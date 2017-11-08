@@ -24,7 +24,7 @@ import (
 
 const (
 	// VERSION holds the version
-	VERSION = "1.1.0"
+	VERSION = "1.2.0"
 
 	// MAXFORKS limits the forks of websockets
 	MAXFORKS = 10
@@ -79,11 +79,6 @@ type Location struct {
 	CityName    string  `json:"city_name"`
 	Latitude    float32 `json:"lat"`
 	Longitude   float32 `json:"lng"`
-}
-
-// Status of the upgrader
-type Status struct {
-	Msg bool `json:"msg"`
 }
 
 // make FileInfo sortable
@@ -252,16 +247,11 @@ func webserver() {
 
 	// upgrade done?
 	http.HandleFunc("/upgrade/mapimport_done", func(rw http.ResponseWriter, req *http.Request) {
-		var s Status
-		s.Msg = false
-
+		status := "false"
 		if _, err := os.Stat("/tmp/mapimport-done.status"); !os.IsNotExist(err) {
-			s.Msg = true
+			status = "true"
 		}
-		// spit out json
-		b := new(bytes.Buffer)
-		json.NewEncoder(b).Encode(s)
-		io.Copy(rw, b)
+		fmt.Fprintf(rw, status)
 	})
 
 	http.ListenAndServe(*listenAddress, nil)

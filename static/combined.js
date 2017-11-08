@@ -453,9 +453,13 @@ P.firmwareupgrade = function() {
       return setInterval(function() {
         try {
           return $.ajax({
-            url: 'http://' + location.host,
-            success: function() {
-              return location.href = 'http://' + location.host;
+            url: 'http://' + location.host + '/upgrade/mapimport_done',
+            success: function(data) {
+              if (data === 'true') {
+                return location.href = 'http://' + location.host;
+              } else {
+                return $('<div class="l">Importing geolocation data, please wait. This can take some minutes. Will reload automatically when done.</div>').appendTo('.firmwareupgrade');
+              }
             }
           });
         } catch (error) {}
