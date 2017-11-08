@@ -81,6 +81,11 @@ type Location struct {
 	Longitude   float32 `json:"lng"`
 }
 
+// Status of the upgrader
+type Status struct {
+	Msg bool `json:"msg"`
+}
+
 // make FileInfo sortable
 type byMtime []os.FileInfo
 
@@ -243,6 +248,20 @@ func webserver() {
 			Version: VERSION,
 		}
 		renderTemplate(rw, "templates/upgrade.html", &model)
+	})
+
+	// upgrade done?
+	http.HandleFunc("/upgrade/mapimport_done", func(rw http.ResponseWriter, req *http.Request) {
+		var s Status
+		s.Msg = false
+
+		if _, err := os.Stat("/tmp/mapimport-done.status"); !os.IsNotExist(err) {
+			s.Msg = true
+		}
+		// spit out json
+		b := new(bytes.Buffer)
+		json.NewEncoder(b).Encode(s)
+		io.Copy(rw, b)
 	})
 
 	http.ListenAndServe(*listenAddress, nil)
